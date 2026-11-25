@@ -1,0 +1,11 @@
+{
+  "empresa": "Distribuidora Exemplo",
+  "estoque_csv": "demo/estoque.csv",
+  "cabecalhos_estoque": {"codigo": "codigo", "descricao": "descricao", "preco": "preco", "estoque": "estoque"},
+  "modelo_xlsx": "demo/modelo.xlsx",
+  "pasta_saida": "saida",
+  "celula_data": "F3",
+  "linha_inicial": 9,
+  "linha_final": 40,
+  "colunas": {"codigo": "B", "descricao": "C", "qtd": "D", "preco": "E", "estoque": "F", "total": "G"}
+}

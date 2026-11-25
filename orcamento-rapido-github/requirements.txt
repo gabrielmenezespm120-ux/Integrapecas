@@ -1,0 +1,5 @@
+anthropic
+openpyxl
+faster-whisper
+# av 16+ quebra o faster-whisper 1.2.1 (metadata_errors); tirar o limite quando o faster-whisper atualizar
+av<16
