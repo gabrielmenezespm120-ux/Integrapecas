@@ -10,6 +10,8 @@ O vendedor manda o pedido do cliente (texto, foto/print, PDF, planilha ou áudio
 - `config.json`: modelo do cliente (qual planilha, quais colunas, onde fica o estoque)
 - `demo/`: dados fictícios (`estoque.csv`, `modelo.xlsx` gerado por `criar_modelo.py`)
 - `teste.py`: teste local, sem WhatsApp e sem gastar API
+- `layouts/`: rascunhos do site de apresentação (o escolhido é `a-catalogo.html`)
+- `sincronizar.ps1`: envia as mudanças para o GitHub; roda sozinho no fim de cada resposta do Claude (hook `Stop` em `~/.claude/settings.json`). Log em `%TEMP%\orcamento-sync.log`. Em outro PC: clonar o repositório e, se quiser o envio automático lá, ajustar o caminho do script no hook.
 
 ## Testar no PC (grátis)
 ```
