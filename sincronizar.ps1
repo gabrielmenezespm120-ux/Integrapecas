@@ -6,6 +6,7 @@ if (-not (Test-Path $git)) { $git = 'git' }
 Set-Location $PSScriptRoot
 if (-not (Test-Path .git)) { exit 0 }
 $log = Join-Path $env:TEMP 'orcamento-sync.log'
+Set-Content (Join-Path $env:TEMP 'orcamento-sync.ultimo') (Get-Date -Format s)  # prova de que o hook rodou
 
 if (& $git status --porcelain) {
     & $git add -A
