@@ -1,9 +1,10 @@
-# QuoteDesk — contexto do projeto
+# FastQuote — contexto do projeto
 
 Negócio próprio do usuário (fora do emprego atual): vender a distribuidoras de peças do ramo automotivo em geral (linha leve e pesada, máquinas, agrícola, empilhadeira) um sistema que lê o pedido do cliente e devolve o orçamento pronto em Excel, no modelo da distribuidora, com preço e estoque.
 
 ## Nome e site
-- Marca: **QuoteDesk** (escolhida em 26/11/2026). Em 26/11: livre no INPI e quotedesk.com.br disponível; quotedesk.com tem dono; nos EUA há o pedido "QUOTEDESK 3D" (USPTO 50182235, 26/10/2026, classe 42, cotação de galpões metálicos) e um "QuoteDesk" no G2. Antes de vender fora do Brasil, rever o nome com especialista em marcas.
+- Marca: **FastQuote** (26/11/2026; substituiu QuoteDesk, que tinha conflito nos EUA). Em 26/11: nada no INPI; fastquote.com.br livre (domínio para começar); fastquote.com e getfastquote.com parados e à venda na GoDaddy; USPTO: marcas FASTQUOTE de software todas mortas, viva só "FARMERS FASTQUOTE" (classe 36, seguros); nenhum software de cotação chamado FastQuote. Ponto fraco: "fast quote" é expressão comum (Google difícil, INPI pode achar descritivo): pedir marca mista (nome + logo) e usar sempre a frase "orçamento automático de peças". Para o exterior, escolher depois um domínio internacional (ex.: fastquote.app) apontando para o mesmo sistema.
+- Logo: folha de orçamento inclinada com raio e rastro de velocidade, animada (movimento contínuo) no topo do site. Arquivos em `layouts/marca/` (`logo.svg` parado, `logo-animado-loop.svg`, `logo-animado-entrada.svg`).
 - Nome em inglês, mas o texto do site na língua de cada cliente (pt-BR primeiro).
 - Site de apresentação: `layouts/a-catalogo.html` (os outros layouts são rascunhos descartados).
 
