@@ -5,7 +5,8 @@ Negócio próprio do usuário (fora do emprego atual): vender a distribuidoras d
 ## Nome e site
 - Marca: **FastQuote** (26/11/2026; substituiu QuoteDesk, que tinha conflito nos EUA). Em 26/11: nada no INPI; fastquote.com.br livre (domínio para começar); fastquote.com e getfastquote.com parados e à venda na GoDaddy; USPTO: marcas FASTQUOTE de software todas mortas, viva só "FARMERS FASTQUOTE" (classe 36, seguros); nenhum software de cotação chamado FastQuote. Ponto fraco: "fast quote" é expressão comum (Google difícil, INPI pode achar descritivo): pedir marca mista (nome + logo) e usar sempre a frase "orçamento automático de peças". Para o exterior, escolher depois um domínio internacional (ex.: fastquote.app) apontando para o mesmo sistema.
 - Logo: folha de orçamento inclinada com raio e rastro de velocidade, animada (movimento contínuo) no topo do site. Arquivos em `layouts/marca/` (`logo.svg` parado, `logo-animado-loop.svg`, `logo-animado-entrada.svg`).
-- Nome em inglês, mas o texto do site na língua de cada cliente (pt-BR primeiro).
+- Nome em inglês, mas o texto do site na língua de cada cliente. O usuário quer lançar já em várias línguas (pt-BR, espanhol, inglês) para vender no Brasil e fora ao mesmo tempo: um domínio internacional com /pt-br, /es, /en e o fastquote.com.br levando para /pt-br.
+- Domínios (GoDaddy, 26/11/2026): fastquote.com à venda por R$ 2.215.002,96 (descartado); getfastquote.com por R$ 10.336,68; fastquotehq.com livre (R$ 109,99/ano); getfastquote.app e fastquote.parts livres; .io e .co não deram para conferir.
 - Site de apresentação: `layouts/a-catalogo.html` (os outros layouts são rascunhos descartados).
 
 ## Regras que não mudam
