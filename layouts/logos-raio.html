@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>QuoteDesk: orçamento relâmpago em movimento</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root { --chapa: #EEF1F3; --tinta: #15202B; --aco: #5B6B7A; --linha: #C9D1D8; --sinal: #F5B700; --branco: #FFFFFF; }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--chapa); color: var(--tinta); font: 16px/1.55 Barlow, system-ui, sans-serif; }
+  .wrap { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
+  header { padding: 48px 0 28px; }
+  h1 { font: 700 clamp(34px, 4.4vw, 52px)/1.05 "Barlow Condensed", sans-serif; margin: 0; }
+  header p { color: var(--aco); max-width: 62ch; margin: 12px 0 0; }
+
+  .opcao { background: var(--branco); border: 1px solid var(--linha); border-radius: 8px; margin-bottom: 24px; overflow: hidden; }
+  .cab { display: flex; gap: 14px; align-items: baseline; padding: 18px 22px; border-bottom: 1px solid var(--linha); }
+  .cab b { font: 700 30px/1 "Barlow Condensed", sans-serif; color: var(--sinal); -webkit-text-stroke: 1.2px var(--tinta); }
+  .cab h2 { font: 700 26px/1.1 "Barlow Condensed", sans-serif; margin: 0; }
+  .cab p { margin: 0; color: var(--aco); font-size: 15px; }
+  .cab div { display: flex; flex-direction: column; gap: 4px; }
+  .vitrine { display: grid; grid-template-columns: 1fr 1fr 220px; }
+  .fundo { display: flex; flex-direction: column; gap: 22px; align-items: center; justify-content: center; padding: 32px 20px; min-height: 170px; }
+  .claro, .pequenos { --acc: var(--sinal); --paper: #fff; }
+  .claro { background: var(--branco); color: var(--tinta); }
+  .escuro { background: var(--tinta); color: #fff; --acc: var(--sinal); --paper: var(--tinta); }
+  .grande { width: 128px; height: 128px; }
+  .pequenos { border-left: 1px solid var(--linha); background: var(--chapa); padding: 20px; display: flex; flex-direction: column; justify-content: center; gap: 16px; color: var(--tinta); }
+  .pequenos .linha { display: flex; align-items: center; gap: 14px; font-size: 13px; color: var(--aco); }
+  .app { width: 56px; height: 56px; border-radius: 14px; background: var(--branco); border: 1px solid var(--linha); display: grid; place-items: center; flex: none; }
+  .app svg { width: 40px; height: 40px; }
+  .aba { display: flex; align-items: center; gap: 8px; background: var(--branco); border: 1px solid var(--linha); border-radius: 8px 8px 0 0; padding: 6px 10px; font-size: 12px; color: var(--tinta); width: fit-content; }
+  .aba svg { width: 16px; height: 16px; }
+
+  .lockup { display: flex; align-items: center; gap: 14px; }
+  .lockup svg { width: 60px; height: 60px; flex: none; }
+  .empilhado { display: flex; flex-direction: column; gap: 5px; }
+  .nome { font: 700 44px/1 "Barlow Condensed", sans-serif; letter-spacing: -0.01em; white-space: nowrap; }
+  .empilhado small { font: 500 14px/1 Barlow, sans-serif; letter-spacing: .02em; opacity: .75; white-space: nowrap; }
+
+  .cheio { fill: currentColor; }
+  .amarelo { fill: var(--acc); }
+  .vazado { fill: var(--paper); }
+  .rastro { fill: none; stroke: var(--acc); stroke-width: 4; stroke-linecap: round; }
+  footer { color: var(--aco); font-size: 14px; padding: 8px 0 48px; }
+
+  @media (max-width: 900px) {
+    .vitrine { grid-template-columns: 1fr; }
+    .pequenos { border-left: 0; border-top: 1px solid var(--linha); flex-direction: row; flex-wrap: wrap; }
+  }
+  @media (max-width: 520px) {
+    .wrap { padding: 0 16px; }
+    .fundo { padding: 26px 12px; }
+    .grande { width: 104px; height: 104px; }
+    .lockup svg { width: 46px; height: 46px; }
+    .nome { font-size: 36px; } .empilhado small { font-size: 12.5px; }
+    .cab { padding: 14px 16px; }
+  }
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <!-- R1: a folha com raio da opção 4, com o rastro da opção 3 -->
+  <symbol id="r1" viewBox="0 0 64 64">
+    <path class="rastro" d="M2 24 H13 M6 33 H13 M2 42 H13"/>
+    <path class="cheio" d="M19 6 H43 L55 18 V58 H19 Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+    <path class="vazado" d="M43 6 V18 H55 Z"/>
+    <path class="amarelo" d="M39 15 L26 36 H35 L31 53 L46 30 H37 L41 15 Z"/>
+  </symbol>
+  <!-- R2: a mesma folha inclinada para a frente, como se estivesse correndo -->
+  <symbol id="r2" viewBox="0 0 64 64">
+    <path class="rastro" d="M2 24 H14 M5 33 H13 M2 42 H11"/>
+    <g transform="translate(10 0) skewX(-12)">
+      <path class="cheio" d="M19 6 H43 L55 18 V58 H19 Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+      <path class="vazado" d="M43 6 V18 H55 Z"/>
+      <path class="amarelo" d="M39 15 L26 36 H35 L31 53 L46 30 H37 L41 15 Z"/>
+    </g>
+  </symbol>
+  <!-- R3: as linhas do orçamento saem da folha e viram o rastro -->
+  <symbol id="r3" viewBox="0 0 64 64">
+    <path class="cheio" d="M20 6 H44 L56 18 V58 H20 Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+    <path class="vazado" d="M44 6 V18 H56 Z"/>
+    <path class="rastro" d="M3 20 H39 M8 29 H47" stroke-width="4.5"/>
+    <path class="amarelo" d="M40 33 L29 47 H36 L33 56 L45 41 H38 L42 33 Z"/>
+  </symbol>
+  <!-- R4: a etiqueta de preço da opção 3 com o raio da opção 4 -->
+  <symbol id="r4" viewBox="0 0 64 64">
+    <path class="rastro" d="M2 24 H10 M4 32 H10 M2 40 H10"/>
+    <path class="cheio" d="M20 13 H44 L60 32 L44 51 H20 a4 4 0 0 1 -4 -4 V17 a4 4 0 0 1 4 -4 Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+    <circle class="vazado" cx="48" cy="32" r="3.8"/>
+    <path class="amarelo" d="M34 16 L23 33 H30 L27 48 L40 29 H33 L36 16 Z"/>
+  </symbol>
+  <!-- R5: o raio recortado na folha; a dobra em amarelo -->
+  <symbol id="r5" viewBox="0 0 64 64">
+    <path class="rastro" d="M2 24 H13 M6 33 H13 M2 42 H13"/>
+    <path class="cheio" fill-rule="evenodd" d="M19 6 H43 L55 18 V58 H19 Z M39 15 L26 36 H35 L31 53 L46 30 H37 L41 15 Z"/>
+    <path class="amarelo" d="M43 6 V18 H55 Z"/>
+  </symbol>
+</svg>
+
+<header class="wrap">
+  <h1>Orçamento relâmpago, em movimento</h1>
+  <p>A folha com raio da opção 4 com o rastro de velocidade da opção 3, em cinco jeitos. Todas vêm com a frase em português embaixo do nome.</p>
+</header>
+
+<main class="wrap">
+  <section class="opcao">
+    <div class="cab"><b>R1</b><div><h2>Folha com raio e rastro</h2><p>A mistura direta: a folha do orçamento com o raio, saindo em velocidade.</p></div></div>
+    <div class="vitrine">
+      <div class="fundo claro"><svg class="grande"><use href="#r1"/></svg><div class="lockup"><svg><use href="#r1"/></svg><span class="empilhado"><span class="nome">QuoteDesk</span><small>orçamento automático de peças</small></span></div></div>
+      <div class="fundo escuro"><div class="lockup"><svg><use href="#r1"/></svg><span class="empilhado"><span class="nome">QuoteDesk</span><small>orçamento automático de peças</small></span></div></div>
+      <div class="pequenos"><div class="linha"><span class="app"><svg><use href="#r1"/></svg></span>ícone de app</div><div class="linha"><span class="aba"><svg><use href="#r1"/></svg>QuoteDesk</span></div></div>
+    </div>
+  </section>
+
+  <section class="opcao">
+    <div class="cab"><b>R2</b><div><h2>Folha inclinada</h2><p>A folha tomba para a frente, como quem está correndo. É a que mais passa sensação de movimento.</p></div></div>
+    <div class="vitrine">
+      <div class="fundo claro"><svg class="grande"><use href="#r2"/></svg><div class="lockup"><svg><use href="#r2"/></svg><span class="empilhado"><span class="nome">QuoteDesk</span><small>orçamento automático de peças</small></span></div></div>
+      <div class="fundo escuro"><div class="lockup"><svg><use href="#r2"/></svg><span class="empilhado"><span class="nome">QuoteDesk</span><small>orçamento automático de peças</small></span></div></div>
+      <div class="pequenos"><div class="linha"><span class="app"><svg><use href="#r2"/></svg></span>ícone de app</div><div class="linha"><span class="aba"><svg><use href="#r2"/></svg>QuoteDesk</span></div></div>
+    </div>
+  </section>
+
+  <section class="opcao">
+    <div class="cab"><b>R3</b><div><h2>Linhas que viram rastro</h2><p>As linhas escritas do orçamento passam para fora da folha e viram o rastro. O raio fica menor, embaixo.</p></div></div>
+    <div class="vitrine">
+      <div class="fundo claro"><svg class="grande"><use href="#r3"/></svg><div class="lockup"><svg><use href="#r3"/></svg><span class="empilhado"><span class="nome">QuoteDesk</span><small>orçamento automático de peças</small></span></div></div>
+      <div class="fundo escuro"><div class="lockup"><svg><use href="#r3"/></svg><span class="empilhado"><span class="nome">QuoteDesk</span><small>orçamento automático de peças</small></span></div></div>
+      <div class="pequenos"><div class="linha"><span class="app"><svg><use href="#r3"/></svg></span>ícone de app</div><div class="linha"><span class="aba"><svg><use href="#r3"/></svg>QuoteDesk</span></div></div>
+    </div>
+  </section>
+
+  <section class="opcao">
+    <div class="cab"><b>R4</b><div><h2>Etiqueta relâmpago</h2><p>A etiqueta de preço da opção 3, com o raio no lugar das linhas.</p></div></div>
+    <div class="vitrine">
+      <div class="fundo claro"><svg class="grande"><use href="#r4"/></svg><div class="lockup"><svg><use href="#r4"/></svg><span class="empilhado"><span class="nome">QuoteDesk</span><small>orçamento automático de peças</small></span></div></div>
+      <div class="fundo escuro"><div class="lockup"><svg><use href="#r4"/></svg><span class="empilhado"><span class="nome">QuoteDesk</span><small>orçamento automático de peças</small></span></div></div>
+      <div class="pequenos"><div class="linha"><span class="app"><svg><use href="#r4"/></svg></span>ícone de app</div><div class="linha"><span class="aba"><svg><use href="#r4"/></svg>QuoteDesk</span></div></div>
+    </div>
+  </section>
+
+  <section class="opcao">
+    <div class="cab"><b>R5</b><div><h2>Raio recortado</h2><p>O raio é um recorte na folha, e a dobra do canto fica em amarelo. Mais limpo e mais marcante.</p></div></div>
+    <div class="vitrine">
+      <div class="fundo claro"><svg class="grande"><use href="#r5"/></svg><div class="lockup"><svg><use href="#r5"/></svg><span class="empilhado"><span class="nome">QuoteDesk</span><small>orçamento automático de peças</small></span></div></div>
+      <div class="fundo escuro"><div class="lockup"><svg><use href="#r5"/></svg><span class="empilhado"><span class="nome">QuoteDesk</span><small>orçamento automático de peças</small></span></div></div>
+      <div class="pequenos"><div class="linha"><span class="app"><svg><use href="#r5"/></svg></span>ícone de app</div><div class="linha"><span class="aba"><svg><use href="#r5"/></svg>QuoteDesk</span></div></div>
+    </div>
+  </section>
+</main>
+
+<footer class="wrap">Rascunhos. O escolhido ganha a versão final em arquivo (SVG e PNG).</footer>
+</body>
+</html>
