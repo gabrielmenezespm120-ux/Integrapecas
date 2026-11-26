@@ -1,6 +1,11 @@
-# Orçamento Rápido — contexto do projeto
+# QuoteDesk — contexto do projeto
 
-Negócio próprio do usuário (fora do emprego atual): vender a distribuidoras de peças de caminhão, máquinas pesadas, agrícola e autopeças B2B um sistema que lê o pedido do cliente e devolve o orçamento pronto em Excel, no modelo da distribuidora, com preço e estoque.
+Negócio próprio do usuário (fora do emprego atual): vender a distribuidoras de peças do ramo automotivo em geral (linha leve e pesada, máquinas, agrícola, empilhadeira) um sistema que lê o pedido do cliente e devolve o orçamento pronto em Excel, no modelo da distribuidora, com preço e estoque.
+
+## Nome e site
+- Marca: **QuoteDesk** (escolhida em 26/11/2026). Em 26/11: livre no INPI e quotedesk.com.br disponível; quotedesk.com tem dono; nos EUA há o pedido "QUOTEDESK 3D" (USPTO 50182235, 26/10/2026, classe 42, cotação de galpões metálicos) e um "QuoteDesk" no G2. Antes de vender fora do Brasil, rever o nome com especialista em marcas.
+- Nome em inglês, mas o texto do site na língua de cada cliente (pt-BR primeiro).
+- Site de apresentação: `layouts/a-catalogo.html` (os outros layouts são rascunhos descartados).
 
 ## Regras que não mudam
 - Nada da empresa onde o usuário trabalha (Elson, peças de empilhadeira): nenhum código, conta, senha, catálogo ou cliente de lá. Não vender para concorrentes diretos dela.

@@ -1,4 +1,4 @@
-# Orçamento rápido (site + WhatsApp opcional)
+# QuoteDesk (site + WhatsApp opcional)
 
 O vendedor manda o pedido do cliente (texto, foto/print, PDF, planilha ou áudio) e recebe o orçamento em .xlsx, no modelo da empresa, com preço e estoque.
 - **Site (principal):** abre o endereço no celular ou PC, entra com usuário e senha, arrasta/cola o pedido e baixa a planilha. Sem número extra, sem Meta.
