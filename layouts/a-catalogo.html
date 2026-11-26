@@ -1,0 +1,546 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Orçamento Rápido · Layout A</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Barlow:wght@400;500;600&family=Caveat:wght@500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --chapa: #EEF1F3; --tinta: #15202B; --aco: #5B6B7A; --linha: #C9D1D8;
+    --sinal: #F5B700; --branco: #FFFFFF; --ok: #1E7A46; --alerta: #B54708; --erro: #B42318;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { margin: 0; background: var(--chapa); color: var(--tinta); font: 17px/1.6 Barlow, system-ui, sans-serif; }
+  h1, h2, h3 { font-family: "Barlow Condensed", sans-serif; line-height: 1.02; margin: 0; letter-spacing: -0.01em; }
+  a { color: inherit; }
+  .wrap { max-width: 1160px; margin: 0 auto; padding: 0 24px; }
+  :focus-visible { outline: 3px solid var(--sinal); outline-offset: 2px; }
+
+  header { border-bottom: 1px solid var(--linha); background: var(--chapa); position: sticky; top: 0; z-index: 5; }
+  header .wrap { display: flex; align-items: center; justify-content: space-between; height: 64px; }
+  .marca { display: flex; align-items: center; gap: 10px; font: 700 22px "Barlow Condensed", sans-serif; text-decoration: none; }
+  .marca svg { width: 30px; height: 30px; }
+  nav a { text-decoration: none; margin-left: 26px; color: var(--aco); font-weight: 500; }
+  nav a:hover { color: var(--tinta); }
+  .bt { display: inline-block; text-decoration: none; font-weight: 600; padding: 13px 22px; border-radius: 4px; border: 2px solid var(--tinta); }
+  .bt-cheio { background: var(--tinta); color: var(--branco); }
+  .bt-cheio:hover { background: #24364A; }
+  .bt-vazio:hover { background: var(--branco); }
+
+  .hero { padding: 72px 0 56px; display: grid; grid-template-columns: 1.05fr 1fr; gap: 56px; align-items: center; }
+  .hero h1 { font-size: clamp(46px, 6.4vw, 84px); font-weight: 700; text-transform: none; }
+  .hero p { font-size: 20px; color: var(--aco); max-width: 34ch; margin: 22px 0 30px; }
+  .hero .acoes { display: flex; gap: 12px; flex-wrap: wrap; }
+  .nota { font-size: 14px; color: var(--aco); margin-top: 14px; }
+
+  /* a vista explodida: pedido -> peças -> planilha */
+  .bancada { position: relative; background: var(--branco); border: 1px solid var(--linha); border-radius: 6px; padding: 22px; }
+  .bancada::before { content: ""; position: absolute; inset: 0; background-image: linear-gradient(var(--linha) 1px, transparent 1px), linear-gradient(90deg, var(--linha) 1px, transparent 1px); background-size: 24px 24px; opacity: .35; border-radius: 6px; pointer-events: none; }
+  .zap { position: relative; background: #E7F6E9; border-radius: 10px 10px 2px 10px; padding: 12px 14px; font-size: 15px; max-width: 88%; margin-left: auto; }
+  .zap small { display: block; text-align: right; color: var(--aco); font-size: 12px; }
+  .seta { position: relative; display: flex; align-items: center; gap: 10px; margin: 16px 0; color: var(--aco); font-size: 13px; font-weight: 600; }
+  .seta::after { content: ""; flex: 1; border-top: 2px dashed var(--aco); }
+  table.orc { position: relative; width: 100%; border-collapse: collapse; font-size: 14px; background: var(--branco); }
+  table.orc th { text-align: left; font: 600 13px Barlow, sans-serif; color: var(--aco); border-bottom: 2px solid var(--tinta); padding: 6px 8px; }
+  table.orc td { border-bottom: 1px solid var(--linha); padding: 7px 8px; }
+  table.orc td.cod { font-weight: 600; white-space: nowrap; }
+  table.orc td.num { text-align: right; white-space: nowrap; }
+  table.orc tfoot td { font-weight: 700; border: 0; font-size: 16px; }
+  .chip { font-size: 12px; font-weight: 600; padding: 2px 8px; border-radius: 3px; white-space: nowrap; }
+  .chip.ok { background: #DDF1E4; color: var(--ok); } .chip.zero { background: #FDEBD3; color: var(--alerta); } .chip.ver { background: #FDE2E0; color: var(--erro); }
+  .linha-anim { opacity: 0; transform: translateY(4px); animation: entra .35s ease-out forwards; }
+  @keyframes entra { to { opacity: 1; transform: none; } }
+  @media (prefers-reduced-motion: reduce) { .linha-anim { animation: none; opacity: 1; transform: none; } }
+
+  .faixa { background: var(--tinta); color: var(--branco); }
+  .faixa .wrap { display: grid; grid-template-columns: repeat(3, 1fr); }
+  .faixa div.item { padding: 30px 24px; border-left: 1px solid #2E4157; }
+  .faixa div.item:first-child { border-left: 0; padding-left: 0; }
+  .faixa b { display: block; font: 700 40px "Barlow Condensed", sans-serif; color: var(--sinal); }
+  .faixa span { color: #B7C3CF; font-size: 15px; }
+
+  /* figuras das máquinas (cartum, mesma linha amarela) */
+  .maquinas { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+  .maquinas + .nota { font-size: 16px; margin-top: 22px; }
+  #maq-empilhadeira { order: 1; }
+  .maq { background: var(--branco); border: 1px solid var(--linha); border-radius: 6px; overflow: hidden; }
+  .palco { padding: 14px 10px 0; border-bottom: 3px solid var(--tinta); background-image: linear-gradient(rgba(201,209,216,.5) 1px, transparent 1px), linear-gradient(90deg, rgba(201,209,216,.5) 1px, transparent 1px); background-size: 24px 24px; }
+  .palco svg { display: block; width: 100%; height: auto; }
+  .maq h3 { font-size: 26px; padding: 16px 18px 4px; }
+  .maq p { margin: 0; padding: 0 18px 20px; color: var(--aco); font-size: 15px; line-height: 1.45; }
+  .cartum .c { stroke: var(--tinta); stroke-width: 3.5; stroke-linejoin: round; stroke-linecap: round; }
+  .cartum .am { fill: var(--sinal); } .cartum .es { fill: #2A3644; } .cartum .vd { fill: #CFE3F0; }
+  .cartum .ac { fill: #9AA8B5; } .cartum .br { fill: #fff; } .cartum .pa { fill: #D9A066; } .cartum .sb { fill: var(--tinta); opacity: .12; }
+
+  /* abertura: a empilhadeira entrega a planilha depois que as linhas entram */
+  .entrega { position: relative; display: flex; align-items: flex-end; gap: 14px; margin-top: 18px; border-bottom: 3px solid var(--tinta); overflow: hidden; }
+  .entrega svg { width: 190px; flex: none; display: block; }
+  .entrega p { margin: 0 0 16px; font-size: 14px; color: var(--aco); line-height: 1.4; }
+  .entrega p b { display: block; color: var(--tinta); font: 700 22px "Barlow Condensed", sans-serif; }
+  @media (prefers-reduced-motion: no-preference) {
+    .entrega svg { animation: chega 1.1s cubic-bezier(.2, .8, .3, 1.12) 1.4s both; }
+    .entrega p { animation: aparece .4s ease-out 2.4s both; }
+  }
+  @keyframes chega { from { transform: translateX(-115%); } to { transform: none; } }
+  @keyframes aparece { from { opacity: 0; } to { opacity: 1; } }
+
+  /* prova: foto de caderno escrito à mão vira orçamento */
+  .caderno-sec { background: var(--branco); border-top: 1px solid var(--linha); border-bottom: 1px solid var(--linha); }
+  .prova { display: grid; grid-template-columns: minmax(0, .85fr) minmax(0, 1.15fr); gap: 48px; align-items: start; }
+  .foto { background: #E7F6E9; border-radius: 10px 10px 10px 2px; padding: 8px 8px 6px; max-width: 440px; }
+  .foto small { display: block; text-align: right; color: var(--aco); font-size: 12px; margin-top: 4px; }
+  .foto-img { position: relative; overflow: hidden; border-radius: 6px; background: #7A6A5A; padding: 14px 10px; }
+  .foto-img::after { content: ""; position: absolute; inset: 0; background: linear-gradient(115deg, rgba(255,255,255,.22), transparent 45%, rgba(0,0,0,.16)); pointer-events: none; }
+  .papel { position: relative; transform: rotate(-2deg); background: #FFFEF6 repeating-linear-gradient(transparent 0 33px, #BCD3E8 33px 34px); background-position: 0 12px; padding: 12px 12px 18px 50px; font: 500 25px/34px Caveat, cursive; color: #22408F; box-shadow: 0 3px 8px rgba(0,0,0,.35); }
+  .papel::before { content: ""; position: absolute; left: 40px; top: 0; bottom: 0; width: 2px; background: #E5A3A3; }
+  .papel .cab { font-weight: 600; text-decoration: underline; margin-left: -6px; }
+  .papel .l { position: relative; }
+  .papel .l i { position: absolute; left: -44px; top: 7px; width: 22px; height: 22px; border-radius: 50%; background: var(--sinal); border: 1.5px solid var(--tinta); color: var(--tinta); font: 700 13px/19px Barlow, sans-serif; font-style: normal; text-align: center; transform: rotate(2deg); }
+  .papel s { text-decoration-thickness: 2px; }
+  .rabisco { display: inline-block; filter: blur(.8px); transform: skewX(-14deg); letter-spacing: -2px; }
+  .prova .seta { margin-top: 0; }
+  table.orc td.lin { font-weight: 700; color: var(--aco); width: 26px; }
+  .lido { display: block; width: fit-content; margin-top: 3px; font-size: 12px; font-weight: 600; padding: 1px 7px; border-radius: 3px; background: #E6EEF6; color: #2C4A66; }
+  .lido.ver { background: #FDE2E0; color: var(--erro); }
+  .dificeis { display: grid; grid-template-columns: repeat(4, 1fr); gap: 28px; margin-top: 56px; }
+  .dificeis div { border-top: 2px solid var(--tinta); padding-top: 16px; }
+  .dificeis h3 { font-size: 23px; margin-bottom: 6px; }
+  .dificeis p { margin: 0; color: var(--aco); font-size: 15.5px; }
+
+  section.bloco { padding: 88px 0; }
+  .titulo { display: grid; grid-template-columns: 1fr 1fr; gap: 56px; align-items: end; margin-bottom: 44px; }
+  .titulo h2 { font-size: clamp(36px, 4.4vw, 56px); }
+  .titulo p { color: var(--aco); margin: 0; max-width: 46ch; }
+
+  .passos { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0; border-top: 2px solid var(--tinta); }
+  .passo { padding: 26px 28px 8px 0; }
+  .passo + .passo { padding-left: 28px; border-left: 1px solid var(--linha); }
+  .passo .n { font: 700 64px/1 "Barlow Condensed", sans-serif; color: var(--sinal); -webkit-text-stroke: 1.5px var(--tinta); }
+  .passo h3 { font-size: 28px; margin: 10px 0 8px; }
+  .passo p { color: var(--aco); margin: 0; }
+
+  .recursos { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1px; background: var(--linha); border: 1px solid var(--linha); }
+  .recurso { background: var(--chapa); padding: 28px; display: grid; grid-template-columns: 44px 1fr; gap: 16px; }
+  .recurso svg { width: 40px; height: 40px; stroke: var(--tinta); fill: none; stroke-width: 1.6; }
+  .recurso h3 { font-size: 24px; margin-bottom: 6px; }
+  .recurso p { margin: 0; color: var(--aco); }
+
+  /* tela do sistema */
+  .tela { background: var(--branco); border: 1px solid var(--linha); border-radius: 8px; overflow: hidden; }
+  .tela .topo { display: flex; align-items: center; gap: 8px; padding: 10px 14px; border-bottom: 1px solid var(--linha); background: #F7F9FA; font-size: 13px; color: var(--aco); }
+  .tela .topo i { width: 10px; height: 10px; border-radius: 50%; background: var(--linha); display: inline-block; }
+  .tela .corpo { display: grid; grid-template-columns: 220px 1fr 300px; min-height: 420px; }
+  .lado { border-right: 1px solid var(--linha); padding: 18px 14px; font-size: 14px; }
+  .lado .novo { display: block; text-align: center; background: var(--sinal); color: var(--tinta); font-weight: 700; padding: 10px; border-radius: 4px; text-decoration: none; margin-bottom: 18px; }
+  .lado p { margin: 0 0 6px; color: var(--aco); font-size: 12px; font-weight: 600; }
+  .lado a.h { display: block; padding: 8px 10px; border-radius: 4px; text-decoration: none; }
+  .lado a.h.ativo { background: var(--chapa); font-weight: 600; }
+  .lado a.h small { display: block; color: var(--aco); font-size: 12px; }
+  .meio { padding: 22px; }
+  .meio h3 { font-size: 30px; }
+  .meio .sub { color: var(--aco); font-size: 14px; margin: 4px 0 16px; }
+  .direita { border-left: 1px solid var(--linha); padding: 22px; background: #F7F9FA; font-size: 14px; }
+  .direita h4 { margin: 0 0 10px; font: 600 15px Barlow, sans-serif; }
+  .conf { background: var(--branco); border: 1px solid var(--linha); border-left: 4px solid var(--erro); padding: 10px 12px; margin-bottom: 10px; }
+  .conf.z { border-left-color: var(--alerta); }
+  .conf b { display: block; }
+  .conf span { color: var(--aco); font-size: 13px; }
+  .direita .bt { width: 100%; text-align: center; margin-top: 8px; }
+
+  .planos { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+  .plano { background: var(--branco); border: 1px solid var(--linha); padding: 28px; border-radius: 6px; display: flex; flex-direction: column; }
+  .plano.destaque { border: 2px solid var(--tinta); box-shadow: 8px 8px 0 var(--sinal); }
+  .plano h3 { font-size: 30px; }
+  .plano .preco { font: 700 44px "Barlow Condensed", sans-serif; margin: 12px 0 2px; }
+  .plano .preco small { font: 500 16px Barlow, sans-serif; color: var(--aco); }
+  .plano ul { padding: 0; list-style: none; margin: 18px 0 24px; flex: 1; }
+  .plano li { padding: 8px 0; border-top: 1px solid var(--linha); color: var(--aco); }
+  .plano li b { color: var(--tinta); font-weight: 600; }
+
+  .faq { display: grid; grid-template-columns: 1fr 1fr; gap: 0 56px; }
+  details { border-top: 1px solid var(--linha); padding: 18px 0; }
+  summary { cursor: pointer; font-weight: 600; font-size: 18px; list-style: none; display: flex; justify-content: space-between; gap: 16px; }
+  summary::after { content: "+"; font: 700 24px/1 "Barlow Condensed"; }
+  details[open] summary::after { content: "–"; }
+  details p { color: var(--aco); margin: 10px 0 0; }
+
+  .fim { background: var(--sinal); padding: 72px 0; }
+  .fim .wrap { display: flex; justify-content: space-between; align-items: center; gap: 32px; flex-wrap: wrap; }
+  .fim h2 { font-size: clamp(36px, 4.6vw, 60px); max-width: 16ch; }
+  footer { padding: 28px 0; font-size: 14px; color: var(--aco); }
+  footer .wrap { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+
+  @media (max-width: 900px) {
+    nav a:not(.bt) { display: none; }
+    .hero, .titulo, .faq { grid-template-columns: 1fr; gap: 28px; }
+    .hero { padding-top: 40px; }
+    .faixa .wrap, .passos, .planos, .recursos { grid-template-columns: 1fr; }
+    .maquinas { grid-template-columns: repeat(2, 1fr); gap: 14px; }
+    .prova { grid-template-columns: minmax(0, 1fr); gap: 28px; }
+    .dificeis { grid-template-columns: repeat(2, 1fr); margin-top: 40px; }
+    .faixa div.item { border-left: 0; border-top: 1px solid #2E4157; padding-left: 0; }
+    .faixa div.item:first-child { border-top: 0; }
+    .passo + .passo { padding-left: 0; border-left: 0; border-top: 1px solid var(--linha); }
+    .tela .corpo { grid-template-columns: 1fr; }
+    .lado { display: none; }
+    .direita { border-left: 0; border-top: 1px solid var(--linha); }
+    section.bloco { padding: 60px 0; }
+    table.orc { font-size: 13px; }
+  }
+  .marca, .bt { white-space: nowrap; }
+  @media (max-width: 520px) { .wrap { padding: 0 16px; } .hide-sm { display: none; } .marca { font-size: 19px; } nav .bt { padding: 7px 12px !important; font-size: 14px; } .maq h3 { font-size: 21px; padding: 12px 12px 4px; } .maq p { font-size: 14px; padding: 0 12px 14px; } .entrega svg { width: 150px; } .entrega p b { font-size: 19px; }
+    .hero { grid-template-columns: minmax(0, 1fr); } .bancada { padding: 14px; }
+    .papel { font-size: 22px; } .dificeis { grid-template-columns: 1fr; gap: 20px; } table.orc th, table.orc td { padding: 6px 4px; } .chip { padding: 2px 5px; } }
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <a class="marca" href="#">
+      <svg viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="16" r="13" fill="none" stroke="#15202B" stroke-width="3"/><circle cx="16" cy="16" r="5" fill="#F5B700" stroke="#15202B" stroke-width="2"/><path d="M16 3v5M16 24v5M3 16h5M24 16h5" stroke="#15202B" stroke-width="3"/></svg>
+      Orçamento Rápido
+    </a>
+    <nav><a href="#segmentos">Para quem é</a><a href="#como">Como funciona</a><a href="#sistema">O sistema</a><a href="#planos">Planos</a><a class="bt bt-cheio" href="#contato" style="padding:9px 16px">Pedir demonstração</a></nav>
+  </div>
+</header>
+
+<main>
+  <div class="wrap hero">
+    <div>
+      <h1>O pedido chega no WhatsApp. O orçamento sai pronto.</h1>
+      <p>Foto, áudio, PDF ou texto bagunçado: o sistema lê, confere no seu estoque e devolve a planilha no modelo da sua empresa, com preço.</p>
+      <div class="acoes">
+        <a class="bt bt-cheio" href="#contato">Mande um pedido de ontem</a>
+        <a class="bt bt-vazio" href="#como">Ver como funciona</a>
+      </div>
+      <p class="nota">Devolvemos o orçamento pronto em 5 minutos, sem compromisso.</p>
+    </div>
+
+    <div class="bancada" aria-label="Exemplo: pedido do WhatsApp virando orçamento">
+      <div class="zap">Bom dia! Orçamento p/ revisão do Atego 2426: filtro de óleo, combustível, separador, ar primário e secundário, secador APU, 22 L de 15W40 e 2 fluido DOT 4<small>09:41</small></div>
+      <div class="seta">lido e conferido no estoque</div>
+      <table class="orc">
+        <thead><tr><th>Código</th><th>Peça</th><th class="hide-sm">Qtd</th><th style="text-align:right">Total</th><th>Estoque</th></tr></thead>
+        <tbody id="linhas"></tbody>
+        <tfoot><tr><td colspan="2"></td><td class="hide-sm"></td><td class="num" id="total">R$ 0,00</td><td></td></tr></tfoot>
+      </table>
+      <div class="entrega cartum">
+        <svg viewBox="0 10 214 122" aria-hidden="true">
+          <ellipse class="sb" cx="110" cy="128" rx="96" ry="4"/>
+          <rect class="c ac" x="138" y="14" width="12" height="108" rx="3"/>
+          <path class="c" fill="none" d="M62 74 L66 26 H128 L134 74"/>
+          <rect class="c es" x="58" y="18" width="78" height="9" rx="4"/>
+          <path class="c es" d="M74 74 V52 q0-6 6-6 h4 q4 0 4 6 V66 h10 V74 z"/>
+          <path class="c" d="M116 74 L108 55"/>
+          <ellipse class="c es" cx="107" cy="53" rx="8" ry="3"/>
+          <path class="c am" d="M30 76 q0-10 10-10 h22 v8 h76 v34 q0 8-8 8 H38 q-8 0-8-8 z"/>
+          <path class="c" fill="none" d="M42 86 h14"/>
+          <rect class="c es" x="150" y="62" width="8" height="58" rx="2"/>
+          <rect class="c es" x="158" y="114" width="48" height="6" rx="1"/>
+          <rect class="c pa" x="158" y="106" width="48" height="8"/>
+          <path class="c br" d="M162 56 h30 l10 10 v40 h-40 z"/>
+          <path class="c" fill="none" d="M192 56 v10 h10"/>
+          <path fill="none" stroke="#15202B" stroke-width="2.5" stroke-linecap="round" d="M169 72 h18 M169 80 h26 M169 88 h14"/>
+          <circle cx="193" cy="95" r="7.5" fill="#1E7A46"/>
+          <path fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" d="M189.5 95 l2.5 2.5 l4.5 -5"/>
+          <circle class="c es" cx="118" cy="112" r="15"/><circle class="br" cx="118" cy="112" r="5"/>
+          <circle class="c es" cx="54" cy="114" r="12"/><circle class="br" cx="54" cy="114" r="4"/>
+        </svg>
+        <p><b>Planilha pronta</b>no modelo da sua empresa, para enviar ao cliente</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="faixa">
+    <div class="wrap">
+      <div class="item"><b>&lt; 1 min</b><span>do pedido à planilha pronta</span></div>
+      <div class="item"><b>Qualquer formato</b><span>texto, print, foto de papel, PDF, planilha e áudio</span></div>
+      <div class="item"><b>Seu modelo</b><span>a planilha sai igual à que sua equipe já usa</span></div>
+    </div>
+  </div>
+
+  <section class="bloco" id="segmentos">
+    <div class="wrap">
+      <div class="titulo"><h2>Para quem vende peça automotiva, da linha leve à pesada</h2><p>Cada ramo pede peça de um jeito. O sistema entende o pedido de balcão de cada um e confere no estoque da sua distribuidora.</p></div>
+      <div class="maquinas cartum">
+        <div class="maq">
+          <div class="palco"><svg viewBox="0 10 200 122" role="img" aria-label="Carro de passeio">
+            <ellipse class="sb" cx="104" cy="128" rx="88" ry="4"/>
+            <path class="c am" d="M16 106 V90 q0-10 10-12 l30-6 l22-24 q4-4 10-4 h48 q6 0 10 4 l24 26 l14 2 q10 2 10 12 V106 z"/>
+            <path class="c vd" d="M66 72 L82 54 h22 v18 z"/>
+            <path class="c vd" d="M112 54 h26 l16 18 h-42 z"/>
+            <path class="c" fill="none" d="M108 76 v22 M90 84 h8 M124 84 h8"/>
+            <circle class="c br" cx="186" cy="88" r="4"/>
+            <rect x="17" y="83" width="6" height="9" rx="1" fill="#B42318"/>
+            <rect class="c es" x="12" y="100" width="186" height="8" rx="4"/>
+            <circle class="c es" cx="52" cy="110" r="15"/><circle class="br" cx="52" cy="110" r="5"/>
+            <circle class="c es" cx="158" cy="110" r="15"/><circle class="br" cx="158" cy="110" r="5"/>
+          </svg></div>
+          <h3>Carro e utilitário</h3><p>Pastilha, amortecedor, kit de embreagem, correia dentada, filtros</p>
+        </div>
+        <div class="maq">
+          <div class="palco"><svg viewBox="0 10 200 122" role="img" aria-label="Moto">
+            <ellipse class="sb" cx="102" cy="128" rx="78" ry="4"/>
+            <circle class="c es" cx="48" cy="106" r="20"/><circle class="c br" cx="48" cy="106" r="7"/>
+            <circle class="c es" cx="156" cy="106" r="20"/><circle class="c br" cx="156" cy="106" r="7"/>
+            <path d="M48 106 L94 96" fill="none" stroke="#15202B" stroke-width="7" stroke-linecap="round"/>
+            <path d="M156 106 L134 52" fill="none" stroke="#15202B" stroke-width="10" stroke-linecap="round"/>
+            <path d="M156 106 L134 52" fill="none" stroke="#9AA8B5" stroke-width="4" stroke-linecap="round"/>
+            <rect class="c ac" x="62" y="100" width="40" height="8" rx="4"/>
+            <rect class="c ac" x="82" y="78" width="34" height="24" rx="4"/>
+            <path class="c es" d="M46 76 q0-8 8-8 h30 v10 H46 z"/>
+            <path class="c am" d="M30 82 q2-12 18-14 h4 v10 h-8 q-6 0 -9 5 z"/>
+            <path class="c am" d="M80 70 q0-12 14-12 h20 q12 0 14 12 l2 10 H80 z"/>
+            <path d="M126 50 l16 -7" fill="none" stroke="#15202B" stroke-width="5" stroke-linecap="round"/>
+            <circle class="c br" cx="146" cy="62" r="6"/>
+          </svg></div>
+          <h3>Moto</h3><p>Kit relação, pastilha, cabos, filtro de ar, lâmpadas</p>
+        </div>
+        <div class="maq" id="maq-empilhadeira">
+          <div class="palco"><svg viewBox="0 10 200 122" role="img" aria-label="Empilhadeira levando uma caixa">
+            <ellipse class="sb" cx="104" cy="128" rx="84" ry="4"/>
+            <rect class="c ac" x="138" y="14" width="12" height="108" rx="3"/>
+            <path class="c" fill="none" d="M62 74 L66 26 H128 L134 74"/>
+            <rect class="c es" x="58" y="18" width="78" height="9" rx="4"/>
+            <path class="c es" d="M74 74 V52 q0-6 6-6 h4 q4 0 4 6 V66 h10 V74 z"/>
+            <path class="c" d="M116 74 L108 55"/>
+            <ellipse class="c es" cx="107" cy="53" rx="8" ry="3"/>
+            <path class="c am" d="M30 76 q0-10 10-10 h22 v8 h76 v34 q0 8-8 8 H38 q-8 0-8-8 z"/>
+            <path class="c" fill="none" d="M42 86 h14"/>
+            <rect class="c es" x="150" y="70" width="8" height="50" rx="2"/>
+            <rect class="c es" x="158" y="114" width="34" height="6" rx="1"/>
+            <rect class="c pa" x="158" y="106" width="34" height="8"/>
+            <rect class="c pa" x="162" y="78" width="28" height="28" rx="2"/>
+            <path class="c" fill="none" d="M176 78 v10"/>
+            <circle class="c es" cx="118" cy="112" r="15"/><circle class="br" cx="118" cy="112" r="5"/>
+            <circle class="c es" cx="54" cy="114" r="12"/><circle class="br" cx="54" cy="114" r="4"/>
+          </svg></div>
+          <h3>Empilhadeira</h3><p>Rolo de torre, corrente de elevação, garfo, filtro hidráulico</p>
+        </div>
+        <div class="maq">
+          <div class="palco"><svg viewBox="0 10 200 122" role="img" aria-label="Caminhão de entrega de peças">
+            <ellipse class="sb" cx="100" cy="128" rx="88" ry="4"/>
+            <rect class="c br" x="12" y="28" width="110" height="76" rx="6"/>
+            <rect class="c am" x="12" y="76" width="110" height="12"/>
+            <text x="67" y="62" text-anchor="middle" style="font:700 24px 'Barlow Condensed',sans-serif;fill:var(--tinta)">PEÇAS</text>
+            <path class="c am" d="M122 104 V48 q0-6 6-6 h26 q6 0 9 5 l14 26 q3 5 3 10 v21 z"/>
+            <path class="c vd" d="M132 52 h20 l12 22 h-32 z"/>
+            <path class="c" fill="none" d="M136 84 h8"/>
+            <rect class="c es" x="12" y="102" width="174" height="8" rx="3"/>
+            <circle class="c br" cx="172" cy="92" r="4"/>
+            <circle class="c es" cx="44" cy="112" r="15"/><circle class="br" cx="44" cy="112" r="5"/>
+            <circle class="c es" cx="150" cy="112" r="15"/><circle class="br" cx="150" cy="112" r="5"/>
+          </svg></div>
+          <h3>Caminhão e ônibus</h3><p>Filtros, pastilha e lona de freio, embreagem, correia</p>
+        </div>
+        <div class="maq">
+          <div class="palco"><svg viewBox="0 10 200 122" role="img" aria-label="Minicarregadeira com a caçamba abaixada">
+            <ellipse class="sb" cx="104" cy="128" rx="82" ry="4"/>
+            <rect class="c am" x="42" y="40" width="20" height="42" rx="4"/>
+            <rect class="c vd" x="62" y="30" width="50" height="48" rx="4"/>
+            <path fill="none" stroke="#15202B" stroke-width="2" d="M79 32 v44 M95 32 v44"/>
+            <rect class="c es" x="58" y="22" width="58" height="10" rx="4"/>
+            <path class="c am" d="M46 82 q0-8 8-8 h66 q8 0 10 8 l4 26 H42 z"/>
+            <path d="M52 48 L116 48 Q138 50 146 86" fill="none" stroke="#15202B" stroke-width="15" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M52 48 L116 48 Q138 50 146 86" fill="none" stroke="#F5B700" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+            <circle class="c es" cx="52" cy="48" r="5"/>
+            <path class="c ac" d="M140 78 h14 q4 0 6 4 l16 26 H138 z"/>
+            <path class="c" fill="none" d="M146 108 v-4 M156 108 v-4 M166 108 v-4"/>
+            <circle class="c es" cx="70" cy="112" r="14"/><circle class="br" cx="70" cy="112" r="5"/>
+            <circle class="c es" cx="114" cy="112" r="14"/><circle class="br" cx="114" cy="112" r="5"/>
+          </svg></div>
+          <h3>Máquinas de obra</h3><p>Dente de caçamba, pino e bucha, kit de vedação, filtro</p>
+        </div>
+        <div class="maq">
+          <div class="palco"><svg viewBox="0 10 200 122" role="img" aria-label="Trator agrícola">
+            <ellipse class="sb" cx="104" cy="128" rx="84" ry="4"/>
+            <rect class="c es" x="124" y="38" width="7" height="26" rx="2"/>
+            <path class="c vd" d="M56 76 L60 30 H104 L108 76 z"/>
+            <rect class="c es" x="52" y="22" width="60" height="10" rx="4"/>
+            <path class="c" fill="none" d="M83 32 v44"/>
+            <path class="c am" d="M50 76 h56 V62 h62 q12 0 12 12 v30 H50 z"/>
+            <path class="c" fill="none" d="M170 72 v24"/>
+            <circle class="c es" cx="64" cy="96" r="30"/><circle class="c br" cx="64" cy="96" r="10"/>
+            <path class="c am" d="M28 96 A36 36 0 0 1 100 96 h-6 A30 30 0 0 0 34 96 z"/>
+            <circle class="c es" cx="156" cy="112" r="14"/><circle class="br" cx="156" cy="112" r="5"/>
+          </svg></div>
+          <h3>Trator e agrícola</h3><p>Navalha, rolamento, retentor, filtro de combustível</p>
+        </div>
+      </div>
+      <p class="nota">E qualquer outra linha: se a peça está no seu cadastro, entra no orçamento.</p>
+    </div>
+  </section>
+
+  <section class="bloco caderno-sec" id="dificil">
+    <div class="wrap">
+      <div class="titulo"><h2>Até foto de caderno vira orçamento</h2><p>Letra corrida, abreviação, rasura, três peças na mesma linha. O sistema separa item por item e marca o que não deu para entender, em vez de chutar.</p></div>
+      <div class="prova">
+        <div class="foto">
+          <div class="foto-img" role="img" aria-label="Foto de uma folha de caderno com sete linhas de pedido escritas à mão">
+            <div class="papel">
+              <div class="cab">Auto Center do Zé 26/11</div>
+              <div class="l"><i>1</i>1 jg pastilha diant. Gol G5</div>
+              <div class="l"><i>2</i>1 jg amortecedor tras.</div>
+              <div class="l"><i>3</i><s>3</s> 4 vela ignição</div>
+              <div class="l"><i>4</i>correia dentada + tensor</div>
+              <div class="l"><i>5</i>óleo 5w30 4 lt</div>
+              <div class="l"><i>6</i>filtro ar / óleo / comb.</div>
+              <div class="l"><i>7</i><span class="rabisco">corr. altern</span> ??</div>
+            </div>
+          </div>
+          <small>Foto recebida no WhatsApp 07:52</small>
+        </div>
+        <div>
+          <div class="seta">7 linhas no caderno viraram 10 itens, 1 para conferir</div>
+          <table class="orc">
+            <thead><tr><th class="hide-sm">Linha</th><th>Código</th><th>Peça</th><th>Qtd</th><th style="text-align:right">Total</th></tr></thead>
+            <tbody>
+              <tr><td class="lin hide-sm">1</td><td class="cod">PST-2210</td><td>Jogo de pastilha dianteira, Gol G5</td><td>1</td><td class="num">129,90</td></tr>
+              <tr><td class="lin hide-sm">2</td><td class="cod">AMT-0412</td><td>Amortecedor traseiro<span class="lido">1 jogo = 2 unidades</span></td><td>2</td><td class="num">398,00</td></tr>
+              <tr><td class="lin hide-sm">3</td><td class="cod">VEL-2201</td><td>Vela de ignição<span class="lido">rasura: vale o 4</span></td><td>4</td><td class="num">87,60</td></tr>
+              <tr><td class="lin hide-sm">4</td><td class="cod">COR-0981</td><td>Correia dentada</td><td>1</td><td class="num">89,50</td></tr>
+              <tr><td class="lin hide-sm">4</td><td class="cod">TEN-0981</td><td>Tensor da correia<span class="lido">2 peças na mesma linha</span></td><td>1</td><td class="num">142,00</td></tr>
+              <tr><td class="lin hide-sm">5</td><td class="cod">OLE-5301</td><td>Óleo 5W30 sintético (litro)</td><td>4</td><td class="num">151,60</td></tr>
+              <tr><td class="lin hide-sm">6</td><td class="cod">FLT-1101</td><td>Filtro de ar<span class="lido">3 filtros na mesma linha</span></td><td>1</td><td class="num">38,90</td></tr>
+              <tr><td class="lin hide-sm">6</td><td class="cod">FLT-1102</td><td>Filtro de óleo</td><td>1</td><td class="num">27,50</td></tr>
+              <tr><td class="lin hide-sm">6</td><td class="cod">FLT-1103</td><td>Filtro de combustível</td><td>1</td><td class="num">34,90</td></tr>
+              <tr><td class="lin hide-sm">7</td><td class="cod">—</td><td>Correia do alternador?<span class="lido ver">letra ilegível: confirme com o cliente</span></td><td>—</td><td class="num">—</td></tr>
+            </tbody>
+            <tfoot><tr><td class="hide-sm"></td><td colspan="3"></td><td class="num">R$ 1.099,90</td></tr></tfoot>
+          </table>
+        </div>
+      </div>
+      <div class="dificeis">
+        <div><h3>Print cortado</h3><p>Lê o que aparece e avisa quando o pedido parece continuar fora do print.</p></div>
+        <div><h3>Áudio com barulho</h3><p>Transcreve o áudio da oficina, separa as peças e deixa o resto da conversa de fora.</p></div>
+        <div><h3>Foto da peça velha</h3><p>Lê o código gravado na peça, quando dá para ver, e procura no seu cadastro.</p></div>
+        <div><h3>Planilha do cliente</h3><p>Ignora o código interno do cliente e usa a descrição e o código do fabricante.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="bloco" id="como">
+    <div class="wrap">
+      <div class="titulo"><h2>Três passos, nenhum sistema novo para aprender</h2><p>O vendedor continua no WhatsApp. O Orçamento Rápido faz a parte chata: achar código, conferir estoque e montar a planilha.</p></div>
+      <div class="passos">
+        <div class="passo"><div class="n">1</div><h3>Encaminhe o pedido</h3><p>Do WhatsApp, toque em Compartilhar e escolha Orçamento Rápido. Vale foto, áudio, PDF ou texto.</p></div>
+        <div class="passo"><div class="n">2</div><h3>O sistema confere</h3><p>Identifica cada peça, procura no seu cadastro e marca o que está confirmado, o que falta e o que precisa de conferência.</p></div>
+        <div class="passo"><div class="n">3</div><h3>Baixe e envie</h3><p>A planilha sai no modelo da sua empresa, com preço e estoque. O vendedor confere e manda para o cliente.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="bloco" style="padding-top:0">
+    <div class="wrap">
+      <div class="recursos">
+        <div class="recurso"><svg viewBox="0 0 40 40" aria-hidden="true"><rect x="7" y="5" width="26" height="30" rx="2"/><path d="M12 13h16M12 19h16M12 25h9"/><path d="M24 27l3 3 6-7"/></svg><div><h3>Nada de peça inventada</h3><p>Código só entra se estiver no seu cadastro ou numa fonte do fabricante. O resto vem marcado para conferir, com o motivo.</p></div></div>
+        <div class="recurso"><svg viewBox="0 0 40 40" aria-hidden="true"><path d="M6 30V12l14-7 14 7v18"/><path d="M6 30h28M13 30V18h14v12"/></svg><div><h3>Estoque e preço da sua empresa</h3><p>O gerente envia o relatório do sistema que vocês já usam. Sem integração complicada.</p></div></div>
+        <div class="recurso"><svg viewBox="0 0 40 40" aria-hidden="true"><rect x="12" y="4" width="16" height="22" rx="8"/><path d="M8 20a12 12 0 0 0 24 0M20 32v5"/></svg><div><h3>Entende áudio</h3><p>O cliente mandou áudio? Encaminhe do jeito que veio. O sistema transcreve e monta o orçamento.</p></div></div>
+        <div class="recurso"><svg viewBox="0 0 40 40" aria-hidden="true"><rect x="8" y="17" width="24" height="18" rx="2"/><path d="M13 17v-5a7 7 0 0 1 14 0v5"/><circle cx="20" cy="26" r="2.5"/></svg><div><h3>Seus preços ficam com você</h3><p>Login individual por vendedor, conexão segura e dados separados de cada empresa.</p></div></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="bloco" id="sistema" style="background:var(--branco);border-top:1px solid var(--linha);border-bottom:1px solid var(--linha)">
+    <div class="wrap">
+      <div class="titulo"><h2>Por dentro do sistema</h2><p>O vendedor vê o orçamento antes de baixar, com o que precisa de atenção separado ao lado. O gerente acompanha tudo pelo histórico.</p></div>
+      <div class="tela">
+        <div class="topo"><i></i><i></i><i></i><span style="margin-left:8px">app.orcamentorapido.com.br</span></div>
+        <div class="corpo">
+          <div class="lado">
+            <a class="novo" href="#">+ Novo orçamento</a>
+            <p>Hoje</p>
+            <a class="h ativo" href="#">Atego 2426 · revisão<small>Transportes Silva · 09:42</small></a>
+            <a class="h" href="#">Volvo FH 540 · freio<small>Rodolog · 08:15</small></a>
+            <p style="margin-top:14px">Ontem</p>
+            <a class="h" href="#">Scania R450 · embreagem<small>JM Cargas</small></a>
+            <a class="h" href="#">MF 4275 · filtros<small>Fazenda Boa Vista</small></a>
+          </div>
+          <div class="meio">
+            <h3>Atego 2426 · revisão</h3>
+            <div class="sub">Pedido por WhatsApp · 10 itens · vendedor João</div>
+            <table class="orc">
+              <thead><tr><th>Código</th><th>Peça</th><th class="hide-sm">Qtd</th><th style="text-align:right">Total</th><th>Situação</th></tr></thead>
+              <tbody>
+                <tr><td class="cod">TRK-0101</td><td>Filtro de óleo motor</td><td class="hide-sm">1</td><td class="num">89,90</td><td><span class="chip ok">10 em estoque</span></td></tr>
+                <tr><td class="cod">TRK-0104</td><td>Filtro de ar primário</td><td class="hide-sm">1</td><td class="num">268,00</td><td><span class="chip ok">3 em estoque</span></td></tr>
+                <tr><td class="cod">TRK-0105</td><td>Filtro de ar secundário</td><td class="hide-sm">1</td><td class="num">142,00</td><td><span class="chip zero">sem estoque</span></td></tr>
+                <tr><td class="cod">TRK-0107</td><td>Óleo 15W40 (litro)</td><td class="hide-sm">22</td><td class="num">723,80</td><td><span class="chip ok">120 em estoque</span></td></tr>
+                <tr><td class="cod">—</td><td>Fluido de freio DOT 4</td><td class="hide-sm">2</td><td class="num">—</td><td><span class="chip ver">conferir</span></td></tr>
+              </tbody>
+              <tfoot><tr><td colspan="2"></td><td class="hide-sm"></td><td class="num">R$ 2.039,20</td><td></td></tr></tfoot>
+            </table>
+          </div>
+          <div class="direita">
+            <h4>Precisa de atenção (2)</h4>
+            <div class="conf"><b>Fluido de freio DOT 4</b><span>Não está no cadastro. Escolha uma peça ou deixe fora.</span></div>
+            <div class="conf z"><b>Filtro de ar secundário</b><span>Sem estoque. Combine o prazo com o cliente ou troque a peça.</span></div>
+            <a class="bt bt-cheio" href="#">Baixar planilha</a>
+            <a class="bt bt-vazio" href="#">Enviar no WhatsApp</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="bloco" id="planos">
+    <div class="wrap">
+      <div class="titulo"><h2>Planos por tamanho de equipe</h2><p>Valores de exemplo para o layout. Implantação cobrada uma vez, com o modelo da sua planilha e o primeiro estoque configurados.</p></div>
+      <div class="planos">
+        <div class="plano"><h3>Essencial</h3><div class="preco">R$ 490<small> /mês</small></div><span style="color:var(--aco)">Para começar com a equipe pequena</span><ul><li><b>Até 3</b> vendedores</li><li><b>300</b> orçamentos por mês</li><li>Busca no seu cadastro</li><li>Suporte por WhatsApp</li></ul><a class="bt bt-vazio" href="#contato" style="text-align:center">Falar com a gente</a></div>
+        <div class="plano destaque"><h3>Profissional</h3><div class="preco">R$ 890<small> /mês</small></div><span style="color:var(--aco)">O mais escolhido por distribuidoras</span><ul><li><b>Até 10</b> vendedores</li><li><b>1.000</b> orçamentos por mês</li><li>Busca no cadastro e nos seus catálogos</li><li>Histórico e relatório do gerente</li></ul><a class="bt bt-cheio" href="#contato" style="text-align:center">Pedir demonstração</a></div>
+        <div class="plano"><h3>Avançado</h3><div class="preco">Sob consulta</div><span style="color:var(--aco)">Para equipes grandes ou várias filiais</span><ul><li>Vendedores <b>ilimitados</b></li><li>Pesquisa de peça na internet</li><li>Mais de uma filial</li><li>Atendimento prioritário</li></ul><a class="bt bt-vazio" href="#contato" style="text-align:center">Falar com a gente</a></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="bloco" style="padding-top:0">
+    <div class="wrap">
+      <div class="titulo"><h2>Perguntas de quem vende peça</h2><p></p></div>
+      <div class="faq">
+        <div>
+          <details><summary>Preciso trocar meu sistema?</summary><p>Não. O Orçamento Rápido usa o relatório de estoque e preço que o seu sistema já exporta.</p></details>
+          <details><summary>E se ele errar a peça?</summary><p>Ele não chuta: o que não tem certeza vem marcado para conferir, e o vendedor sempre revisa antes de enviar.</p></details>
+        </div>
+        <div>
+          <details><summary>Funciona no celular?</summary><p>Sim. Abre no navegador do celular e recebe o pedido direto do WhatsApp, sem baixar arquivo.</p></details>
+          <details><summary>Quanto tempo leva para começar?</summary><p>Com o modelo da planilha e o relatório de estoque em mãos, a equipe começa a usar na mesma semana.</p></details>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="fim" id="contato">
+    <div class="wrap">
+      <h2>Mande um pedido que chegou ontem. Devolvemos o orçamento pronto.</h2>
+      <a class="bt bt-cheio" href="#">Chamar no WhatsApp</a>
+    </div>
+  </section>
+</main>
+<footer><div class="wrap"><span>Orçamento Rápido · orçamento automático para distribuidoras de peças</span><span>contato@orcamentorapido.com.br</span></div></footer>
+
+<script>
+  const itens = [
+    ["TRK-0101", "Filtro de óleo motor", 1, 89.9, "ok", "10"],
+    ["TRK-0102", "Filtro de combustível", 1, 74.5, "ok", "8"],
+    ["TRK-0103", "Filtro separador de água", 1, 112, "ok", "5"],
+    ["TRK-0105", "Filtro de ar secundário", 1, 142, "zero", "sem estoque"],
+    ["TRK-0107", "Óleo 15W40 (litro)", 22, 32.9, "ok", "120"],
+    ["—", "Fluido de freio DOT 4", 2, 0, "ver", "conferir"],
+  ];
+  const brl = v => v.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
+  const corpo = document.getElementById("linhas"), tot = document.getElementById("total");
+  let soma = 0;
+  itens.forEach(([c, d, q, p, s, e], i) => {
+    const tr = document.createElement("tr");
+    tr.className = "linha-anim"; tr.style.animationDelay = (0.25 + i * 0.18) + "s";
+    tr.innerHTML = `<td class="cod">${c}</td><td>${d}</td><td class="hide-sm">${q}</td><td class="num">${p ? brl(q * p).replace("R$", "").trim() : "—"}</td><td><span class="chip ${s}">${e}</span></td>`;
+    corpo.append(tr); soma += q * p;
+  });
+  setTimeout(() => tot.textContent = brl(soma), 250 + itens.length * 180);
+</script>
+</body>
+</html>

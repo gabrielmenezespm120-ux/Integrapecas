@@ -1,0 +1,382 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Orçamento Rápido — balcão de peças</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@500;600;700;800&family=Saira:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --fundo:#F4F5F6; --papel:#FFFFFF; --grafite:#1E2328; --aco:#5F6973; --linha:#D3D8DD;
+  --caixa:#1F5FAE; --caixa-esc:#174A88; --etiqueta:#E8590C; --ok:#2F7D4A;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--fundo);color:var(--grafite);font:400 17px/1.55 Saira,system-ui,sans-serif}
+h1,h2,h3{font-family:"Saira Condensed",sans-serif;line-height:1.05;margin:0}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--etiqueta);outline-offset:3px}
+.wrap{max-width:1180px;margin:0 auto;padding:0 24px}
+.bt{display:inline-block;font:600 17px Saira,sans-serif;text-decoration:none;padding:13px 22px;border-radius:4px;background:var(--caixa);color:#fff;border:2px solid var(--caixa);white-space:nowrap}
+.bt:hover{background:var(--caixa-esc);border-color:var(--caixa-esc)}
+.bt.sec{background:transparent;color:var(--grafite);border-color:var(--grafite)}
+.bt.sec:hover{background:var(--grafite);color:#fff}
+
+/* cabeçalho */
+header{background:var(--papel);border-bottom:1px solid var(--linha);position:sticky;top:0;z-index:5}
+header .wrap{display:flex;align-items:center;justify-content:space-between;height:64px;gap:16px}
+.marca{font:800 24px "Saira Condensed",sans-serif;text-decoration:none;white-space:nowrap;display:flex;align-items:center;gap:10px}
+.marca i{display:inline-block;width:26px;height:20px;background:var(--caixa);border-radius:3px 3px 6px 6px;position:relative}
+.marca i::after{content:"";position:absolute;left:6px;right:6px;top:5px;height:5px;background:#fff;border-radius:1px}
+nav{display:flex;align-items:center;gap:26px}
+nav a.l{text-decoration:none;color:var(--aco);font-weight:500}
+nav a.l:hover{color:var(--grafite)}
+
+/* hero */
+.hero{padding:64px 0 56px}
+.hero .wrap{display:grid;grid-template-columns:1fr 1.15fr;gap:48px;align-items:center}
+.hero h1{font-size:clamp(40px,5vw,68px);font-weight:800;letter-spacing:-.5px}
+.hero p.sub{font-size:19px;color:var(--aco);max-width:30em;margin:20px 0 28px}
+.acoes{display:flex;gap:12px;flex-wrap:wrap}
+.segs-mini{margin-top:30px;color:var(--aco);font-size:15px}
+.segs-mini b{color:var(--grafite);font-weight:600}
+
+/* prancha (vista explodida + lista de peças) */
+.prancha{background:var(--papel);border:1px solid var(--linha);border-radius:6px;padding:20px 20px 8px;box-shadow:0 1px 0 var(--linha)}
+.prancha-top{display:flex;justify-content:space-between;font-size:14px;color:var(--aco);border-bottom:1px solid var(--linha);padding-bottom:10px;margin-bottom:6px}
+.prancha-top b{color:var(--grafite);font-family:"Saira Condensed";font-size:17px}
+.prancha svg{width:100%;height:auto;display:block}
+.prancha svg .pc{fill:#E9ECEF;stroke:var(--grafite);stroke-width:1.6}
+.prancha svg .eixo{stroke:var(--aco);stroke-width:1;stroke-dasharray:10 4 2 4}
+.prancha svg .ld{stroke:var(--grafite);stroke-width:1}
+.prancha svg .bal circle{fill:#fff;stroke:var(--grafite);stroke-width:1.4}
+.prancha svg .bal text{font:700 14px "Saira Condensed";text-anchor:middle;dominant-baseline:central;fill:var(--grafite)}
+.lista{width:100%;border-collapse:collapse;font-size:14.5px;margin-top:6px}
+.lista th{text-align:left;font-weight:600;color:var(--aco);border-bottom:2px solid var(--grafite);padding:6px 6px}
+.lista td{padding:7px 6px;border-bottom:1px solid var(--linha)}
+.lista td.n{width:30px;font-weight:700;font-family:"Saira Condensed";font-size:16px}
+.lista td.cod{font-weight:600;white-space:nowrap}
+.lista td.r{text-align:right;white-space:nowrap}
+.est{font-size:13px;font-weight:600;padding:2px 8px;border-radius:10px;white-space:nowrap}
+.est.ok{background:#E3F1E7;color:var(--ok)}
+.est.zero{background:#FDE9DD;color:#A8430A}
+.lista tfoot td{border:0;font-weight:700;padding-top:10px}
+/* único momento animado: as linhas da lista acendem junto com o balão da peça */
+@media (prefers-reduced-motion:no-preference){
+  .lista tbody tr{animation:acende 9s infinite}
+  .prancha svg .bal circle{animation:balao 9s infinite}
+  .lista tbody tr:nth-child(2),.prancha svg .bal:nth-of-type(2) circle{animation-delay:1.5s}
+  .lista tbody tr:nth-child(3),.prancha svg .bal:nth-of-type(3) circle{animation-delay:3s}
+  .lista tbody tr:nth-child(4),.prancha svg .bal:nth-of-type(4) circle{animation-delay:4.5s}
+  .lista tbody tr:nth-child(5),.prancha svg .bal:nth-of-type(5) circle{animation-delay:6s}
+  .lista tbody tr:nth-child(6),.prancha svg .bal:nth-of-type(6) circle{animation-delay:7.5s}
+}
+@keyframes acende{0%,16%{background:#FFF1E8}17%,100%{background:transparent}}
+@keyframes balao{0%,16%{fill:var(--etiqueta)}17%,100%{fill:#fff}}
+
+/* seções */
+section{padding:84px 0}
+h2{font-size:clamp(32px,3.6vw,48px);font-weight:800;max-width:18em}
+.intro{color:var(--aco);font-size:18px;max-width:36em;margin:14px 0 40px}
+
+/* segmentos */
+.segmentos{background:var(--papel);border-top:1px solid var(--linha);border-bottom:1px solid var(--linha)}
+.seg-grid{display:grid;grid-template-columns:repeat(5,1fr);border:1px solid var(--linha);border-radius:6px;overflow:hidden}
+.seg{padding:24px 20px 22px;border-right:1px solid var(--linha);display:flex;flex-direction:column;gap:12px}
+.seg:last-child{border-right:0}
+.seg svg{width:56px;height:40px;stroke:var(--grafite);stroke-width:2;fill:none;stroke-linecap:round;stroke-linejoin:round}
+.seg h3{font-size:23px;font-weight:700}
+.seg .pedido{margin-top:auto;background:#E7F4E0;border-radius:8px 8px 8px 2px;padding:9px 11px;font-size:14.5px;line-height:1.35}
+.seg .vira{font-size:13.5px;color:var(--aco);line-height:1.35}
+.seg .vira b{color:var(--grafite)}
+
+/* língua do balcão */
+.traducao{display:grid;grid-template-columns:1fr 1fr;border:1px solid var(--linha);border-radius:6px;background:var(--papel);overflow:hidden}
+.traducao .cab{padding:14px 22px;font:700 19px "Saira Condensed";border-bottom:2px solid var(--grafite)}
+.traducao .cab.b{background:var(--grafite);color:#fff;border-color:var(--grafite)}
+.traducao .c{padding:15px 22px;border-bottom:1px solid var(--linha);font-size:16px}
+.traducao .c.a{font-style:italic;color:#38414A;border-right:1px solid var(--linha)}
+.traducao .c.b small{display:block;color:var(--aco);font-size:14px}
+.traducao .c:nth-last-child(-n+2){border-bottom:0}
+
+/* prateleira */
+.prateleira-sec{background:var(--grafite);color:#fff}
+.prateleira-sec .intro{color:#B9C1C9}
+.prat{display:grid;grid-template-columns:repeat(4,1fr);gap:0;border-bottom:10px solid #59626B;padding:0 8px}
+.gaveta{margin:0 8px 0;background:var(--caixa);border-radius:4px 4px 0 0;padding:16px 14px 18px;position:relative}
+.gaveta .et{background:#fff;color:var(--grafite);border-radius:2px;padding:8px 10px;font-size:14px;line-height:1.35}
+.gaveta .et b{display:block;font:700 19px "Saira Condensed"}
+.gaveta .loc{display:inline-block;margin-top:12px;background:var(--etiqueta);color:#fff;font:700 15px "Saira Condensed";padding:3px 9px;border-radius:2px}
+.gaveta .dados{margin-top:10px;font-size:14px;color:#DCE7F5}
+.gaveta.vazia{background:#3A434C}
+.gaveta.vazia .dados{color:#F6B48F}
+.prat-legenda{display:grid;grid-template-columns:repeat(3,1fr);gap:28px;margin-top:44px}
+.prat-legenda h3{font-size:22px;margin-bottom:6px}
+.prat-legenda p{margin:0;color:#B9C1C9;font-size:16px}
+
+/* passos */
+.passos{display:grid;grid-template-columns:repeat(3,1fr);gap:28px;counter-reset:p}
+.passo{border-top:3px solid var(--grafite);padding-top:18px}
+.passo .num{font:800 46px "Saira Condensed";color:var(--caixa);line-height:1}
+.passo h3{font-size:25px;margin:8px 0 8px}
+.passo p{margin:0;color:var(--aco)}
+
+/* planos */
+.planos{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;align-items:stretch}
+.plano{background:var(--papel);border:1px solid var(--linha);border-radius:6px;padding:28px 26px;display:flex;flex-direction:column}
+.plano.dest{border:2px solid var(--caixa)}
+.plano h3{font-size:27px}
+.plano .preco{font:800 42px "Saira Condensed";margin:12px 0 2px}
+.plano .preco small{font:500 16px Saira;color:var(--aco)}
+.plano ul{padding-left:20px;margin:16px 0 24px;color:#38414A}
+.plano li{margin:6px 0}
+.plano .bt{margin-top:auto;text-align:center}
+.nota{color:var(--aco);font-size:14.5px;margin-top:18px}
+
+/* faq */
+.faq{max-width:780px}
+details{border-bottom:1px solid var(--linha);padding:18px 0}
+summary{cursor:pointer;font:700 21px "Saira Condensed";list-style:none;display:flex;justify-content:space-between;gap:16px}
+summary::after{content:"+";font-size:26px;line-height:1;color:var(--caixa)}
+details[open] summary::after{content:"–"}
+details p{margin:10px 0 0;color:#38414A}
+
+/* final */
+.final{background:var(--caixa);color:#fff;padding:72px 0}
+.final .wrap{display:flex;justify-content:space-between;align-items:center;gap:32px;flex-wrap:wrap}
+.final h2{max-width:16em}
+.final p{color:#DCE7F5;margin:12px 0 0;max-width:32em}
+.final .bt{background:#fff;color:var(--caixa);border-color:#fff}
+.final .bt:hover{background:var(--grafite);color:#fff;border-color:var(--grafite)}
+footer{padding:28px 0;color:var(--aco);font-size:14.5px}
+
+@media (max-width:1000px){
+  .hero .wrap{grid-template-columns:minmax(0,1fr)}
+  .seg-grid{grid-template-columns:repeat(2,1fr)}
+  .seg{border-bottom:1px solid var(--linha)}
+  .seg:nth-child(2n){border-right:0}
+  .seg:last-child{grid-column:1/-1}
+  .prat{grid-template-columns:repeat(2,1fr);row-gap:18px;border-bottom:0;padding:0}
+  .prat-legenda,.passos,.planos{grid-template-columns:1fr}
+}
+@media (max-width:640px){
+  .wrap{padding:0 16px}
+  nav a.l{display:none}
+  nav .bt{padding:7px 12px;font-size:14px}
+  .marca{font-size:21px}
+  section{padding:60px 0}
+  .hero{padding:40px 0}
+  .seg-grid{grid-template-columns:1fr}
+  .seg{border-right:0}
+  .traducao{grid-template-columns:1fr}
+  .traducao .cab.a{display:none}
+  .traducao .cab.b{display:none}
+  .traducao .c.a{border-right:0;border-bottom:0;padding-bottom:4px}
+  .traducao .c.a::before{content:"Cliente: ";font-style:normal;font-weight:600;color:var(--aco)}
+  .traducao .c.b{padding-top:4px}
+  .traducao .c:nth-last-child(2){border-bottom:0}
+  .lista th:nth-child(4),.lista td:nth-child(4){display:none}
+  .prancha{padding:14px 12px 4px}
+  .prancha-top span:last-child{display:none}
+  .lista{font-size:13.5px}
+  .lista td,.lista th{padding:6px 4px}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <a class="marca" href="#"><i aria-hidden="true"></i>Orçamento Rápido</a>
+    <nav>
+      <a class="l" href="#segmentos">Para quem é</a>
+      <a class="l" href="#estoque">Estoque</a>
+      <a class="l" href="#planos">Planos</a>
+      <a class="bt" href="#contato">Testar com um pedido</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+<section class="hero" style="padding-top:64px">
+  <div class="wrap">
+    <div>
+      <h1>Feito para distribuidora de peças. Do pedido do cliente ao orçamento pronto.</h1>
+      <p class="sub">O cliente manda o pedido no WhatsApp, por foto, áudio ou planilha. O sistema entende código, aplicação e abreviação de balcão, confere no seu estoque e devolve o orçamento no modelo da sua empresa.</p>
+      <div class="acoes">
+        <a class="bt" href="#contato">Testar com um pedido de ontem</a>
+        <a class="bt sec" href="#segmentos">Ver os segmentos</a>
+      </div>
+      <p class="segs-mini">Para quem vende peça de <b>caminhão e ônibus</b>, <b>máquinas pesadas</b>, <b>agrícola</b>, <b>empilhadeira</b> e <b>autopeças</b>.</p>
+    </div>
+
+    <div class="prancha" role="img" aria-label="Vista explodida de um cubo de roda com a lista de peças do orçamento: seis itens, cinco com estoque, um sem estoque">
+      <div class="prancha-top"><span><b>Cubo de roda dianteiro</b> · pedido de Transportes Serra</span><span>vista explodida</span></div>
+      <svg viewBox="0 0 560 200" aria-hidden="true">
+        <line class="eixo" x1="10" y1="120" x2="550" y2="120"/>
+        <!-- 1 ponta de eixo -->
+        <path class="pc" d="M20 104 h70 l10 6 v20 l-10 6 h-70 z"/>
+        <!-- 2 retentor -->
+        <rect class="pc" x="128" y="86" width="12" height="68" rx="4"/>
+        <!-- 3 rolamento interno -->
+        <path class="pc" d="M168 92 h30 l8 10 v36 l-8 10 h-30 z"/>
+        <line class="ld" x1="174" y1="96" x2="200" y2="144"/><line class="ld" x1="184" y1="94" x2="204" y2="134"/>
+        <!-- 4 cubo -->
+        <path class="pc" d="M236 58 h18 v24 h70 v-10 h12 v96 h-12 v-10 h-70 v24 h-18 z"/>
+        <circle class="pc" cx="245" cy="68" r="4"/><circle class="pc" cx="245" cy="172" r="4"/>
+        <!-- 5 rolamento externo -->
+        <path class="pc" d="M366 98 h26 l7 8 v28 l-7 8 h-26 z"/>
+        <line class="ld" x1="371" y1="102" x2="394" y2="139"/>
+        <!-- 6 porca -->
+        <path class="pc" d="M430 104 h28 l8 8 v16 l-8 8 h-28 l-8 -8 v-16 z"/>
+        <line class="ld" x1="430" y1="104" x2="430" y2="136"/><line class="ld" x1="458" y1="104" x2="458" y2="136"/>
+        <!-- balões -->
+        <line class="ld" x1="55" y1="104" x2="55" y2="40"/><line class="ld" x1="134" y1="86" x2="134" y2="40"/>
+        <line class="ld" x1="187" y1="92" x2="187" y2="40"/><line class="ld" x1="290" y1="82" x2="290" y2="30"/>
+        <line class="ld" x1="379" y1="98" x2="379" y2="40"/><line class="ld" x1="444" y1="104" x2="444" y2="40"/>
+        <g class="bal"><circle cx="55" cy="28" r="13"/><text x="55" y="28">1</text></g>
+        <g class="bal"><circle cx="134" cy="28" r="13"/><text x="134" y="28">2</text></g>
+        <g class="bal"><circle cx="187" cy="28" r="13"/><text x="187" y="28">3</text></g>
+        <g class="bal"><circle cx="290" cy="18" r="13"/><text x="290" y="18">4</text></g>
+        <g class="bal"><circle cx="379" cy="28" r="13"/><text x="379" y="28">5</text></g>
+        <g class="bal"><circle cx="444" cy="28" r="13"/><text x="444" y="28">6</text></g>
+      </svg>
+      <table class="lista">
+        <thead><tr><th></th><th>Código</th><th>Descrição</th><th>Qtd</th><th class="r">Estoque</th></tr></thead>
+        <tbody>
+          <tr><td class="n">1</td><td class="cod">EX-4410</td><td>Ponta de eixo</td><td>1</td><td class="r"><span class="est ok">3 un</span></td></tr>
+          <tr><td class="n">2</td><td class="cod">RT-0918</td><td>Retentor do cubo</td><td>2</td><td class="r"><span class="est ok">14 un</span></td></tr>
+          <tr><td class="n">3</td><td class="cod">RL-33213</td><td>Rolamento interno</td><td>2</td><td class="r"><span class="est ok">6 un</span></td></tr>
+          <tr><td class="n">4</td><td class="cod">CB-2207</td><td>Cubo de roda</td><td>1</td><td class="r"><span class="est zero">sem estoque</span></td></tr>
+          <tr><td class="n">5</td><td class="cod">RL-32310</td><td>Rolamento externo</td><td>2</td><td class="r"><span class="est ok">9 un</span></td></tr>
+          <tr><td class="n">6</td><td class="cod">PC-0631</td><td>Porca do cubo</td><td>2</td><td class="r"><span class="est ok">20 un</span></td></tr>
+        </tbody>
+        <tfoot><tr><td></td><td colspan="3">Orçamento pronto em 52 s</td><td class="r">R$ 1.486,40</td></tr></tfoot>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section class="segmentos" id="segmentos">
+  <div class="wrap">
+    <h2>Cada ramo pede peça de um jeito. O sistema entende todos.</h2>
+    <p class="intro">O vendedor de balcão sabe que “jogo de pastilha” é um item e que “22 L de 15W40” é óleo a granel. O sistema foi feito para ler pedido como ele lê.</p>
+    <div class="seg-grid">
+      <div class="seg">
+        <svg viewBox="0 0 56 40" aria-hidden="true"><path d="M3 30V12h28v18M31 18h12l8 8v4H31"/><circle cx="12" cy="32" r="4"/><circle cx="42" cy="32" r="4"/></svg>
+        <h3>Caminhão e ônibus</h3>
+        <div class="pedido">2 filtro racor e 1 secador APU pro Axor 2644</div>
+        <div class="vira">Vira <b>2 itens</b> com código, aplicação e estoque.</div>
+      </div>
+      <div class="seg">
+        <svg viewBox="0 0 56 40" aria-hidden="true"><path d="M4 32h30M8 32v-9h16v9M24 23l12-14 12 6-4 8M44 23l4 7h-8"/><circle cx="10" cy="34" r="2"/><circle cx="30" cy="34" r="2"/></svg>
+        <h3>Máquinas pesadas</h3>
+        <div class="pedido">kit reparo cilindro da caçamba retro 416</div>
+        <div class="vira">Vira <b>1 kit</b>, com aviso se faltar alguma peça do kit.</div>
+      </div>
+      <div class="seg">
+        <svg viewBox="0 0 56 40" aria-hidden="true"><path d="M6 28V14h18l6 8h14v6"/><circle cx="14" cy="30" r="7"/><circle cx="44" cy="32" r="4"/><path d="M18 14V7h6"/></svg>
+        <h3>Agrícola</h3>
+        <div class="pedido">3 navalha plataforma e 10 dedo duplo, colheitadeira</div>
+        <div class="vira">Vira <b>2 itens</b> na quantidade certa, por unidade.</div>
+      </div>
+      <div class="seg">
+        <svg viewBox="0 0 56 40" aria-hidden="true"><path d="M30 32V8h4v24M34 28h18M34 33h18M8 32V18h14l4 6v8"/><circle cx="12" cy="33" r="3"/><circle cx="23" cy="33" r="3"/></svg>
+        <h3>Empilhadeira</h3>
+        <div class="pedido">rolo de torre e corrente de elevação, Hyster H50</div>
+        <div class="vira">Vira <b>2 itens</b> e respeita o modelo e o mastro.</div>
+      </div>
+      <div class="seg">
+        <svg viewBox="0 0 56 40" aria-hidden="true"><path d="M5 27l5-9h30l8 9v5H5z"/><circle cx="15" cy="32" r="4"/><circle cx="40" cy="32" r="4"/><path d="M14 18l3-6h17l5 6"/></svg>
+        <h3>Autopeças</h3>
+        <div class="pedido">jg pastilha diant + 2 amortecedor tras, frota de Strada</div>
+        <div class="vira">Vira <b>1 jogo e 2 peças</b>, sem confundir os dois.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <h2>Fala a língua do balcão.</h2>
+    <p class="intro">Abreviação, código com traço ou sem traço, número do fabricante no lugar do original. É assim que o pedido chega, e é assim que ele é lido.</p>
+    <div class="traducao">
+      <div class="cab a">O cliente escreve</div><div class="cab b">O orçamento sai com</div>
+      <div class="c a">flt comb 2x</div><div class="c b">Filtro de combustível, quantidade 2<small>Abreviação entendida</small></div>
+      <div class="c a">rolamento 33213 / 33.213</div><div class="c b">RL-33213, rolamento cônico<small>O mesmo código, escrito de dois jeitos</small></div>
+      <div class="c a">o filtro que é igual ao LF-3000</div><div class="c b">O item do seu estoque cadastrado como equivalente<small>Equivalência do seu cadastro</small></div>
+      <div class="c a">22 litro de 15W40</div><div class="c b">Óleo 15W40, 22 litros, preço por litro<small>Unidade de venda respeitada</small></div>
+      <div class="c a">“aquela correia do motor, a de sempre”</div><div class="c b">Item marcado para o vendedor conferir<small>Na dúvida, o sistema pergunta em vez de chutar</small></div>
+    </div>
+  </div>
+</section>
+
+<section class="prateleira-sec" id="estoque">
+  <div class="wrap">
+    <h2>Consulta a sua prateleira, não um catálogo genérico.</h2>
+    <p class="intro">O orçamento sai com o seu código, o seu preço, o seu estoque e a locação de cada peça. O que estiver zerado vem marcado antes de chegar no cliente.</p>
+    <div class="prat">
+      <div class="gaveta"><div class="et"><b>RL-33213</b>Rolamento cônico</div><span class="loc">A-03-12</span><div class="dados">6 un · R$ 148,00</div></div>
+      <div class="gaveta"><div class="et"><b>RT-0918</b>Retentor do cubo</div><span class="loc">A-03-14</span><div class="dados">14 un · R$ 62,50</div></div>
+      <div class="gaveta vazia"><div class="et"><b>CB-2207</b>Cubo de roda</div><span class="loc">B-01-02</span><div class="dados">Sem estoque · avisar o cliente</div></div>
+      <div class="gaveta"><div class="et"><b>PC-0631</b>Porca do cubo</div><span class="loc">A-05-01</span><div class="dados">20 un · R$ 38,90</div></div>
+    </div>
+    <div class="prat-legenda">
+      <div><h3>Seu cadastro</h3><p>Lê a exportação do seu sistema de gestão. Não precisa trocar de sistema nem digitar nada de novo.</p></div>
+      <div><h3>Seu modelo de orçamento</h3><p>O arquivo sai na planilha que a sua empresa já usa, com logo, colunas e condições.</p></div>
+      <div><h3>Seus dados, só seus</h3><p>Cada distribuidora vê apenas o próprio estoque e os próprios orçamentos.</p></div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <h2>Como funciona</h2>
+    <p class="intro">Três passos, do pedido ao arquivo enviado.</p>
+    <div class="passos">
+      <div class="passo"><div class="num">1</div><h3>Encaminhe o pedido</h3><p>Texto, foto da lista, áudio ou planilha do cliente, do jeito que chegou no WhatsApp.</p></div>
+      <div class="passo"><div class="num">2</div><h3>Confira o que foi lido</h3><p>Cada linha aparece com código, quantidade e estoque. O que tiver dúvida vem marcado.</p></div>
+      <div class="passo"><div class="num">3</div><h3>Envie o orçamento</h3><p>Baixe o arquivo no modelo da empresa e mande para o cliente.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="planos" style="padding-top:20px">
+  <div class="wrap">
+    <h2>Planos</h2>
+    <p class="intro">Por loja, com vendedores ilimitados no plano Profissional.</p>
+    <div class="planos">
+      <div class="plano"><h3>Essencial</h3><div class="preco">R$ 490 <small>/mês</small></div><ul><li>Até 3 vendedores</li><li>Texto, foto e planilha</li><li>Seu modelo de orçamento</li></ul><a class="bt sec" href="#contato">Começar teste</a></div>
+      <div class="plano dest"><h3>Profissional</h3><div class="preco">R$ 890 <small>/mês</small></div><ul><li>Vendedores ilimitados</li><li>Áudio do WhatsApp</li><li>Painel do gerente</li><li>Atualização diária do estoque</li></ul><a class="bt" href="#contato">Começar teste</a></div>
+      <div class="plano"><h3>Rede</h3><div class="preco">Sob consulta</div><ul><li>Várias filiais</li><li>Estoque por filial</li><li>Implantação acompanhada</li></ul><a class="bt sec" href="#contato">Falar com a gente</a></div>
+    </div>
+    <p class="nota">Valores de exemplo, ainda em definição.</p>
+  </div>
+</section>
+
+<section style="padding-top:20px">
+  <div class="wrap faq">
+    <h2>Perguntas</h2>
+    <details><summary>Funciona com o meu sistema de gestão?</summary><p>Se o seu sistema exporta o cadastro de produtos em planilha (xlsx ou csv), funciona. A maioria exporta.</p></details>
+    <details><summary>E quando o cliente manda só a descrição, sem código?</summary><p>O sistema procura no seu cadastro pela descrição e aplicação. Se houver mais de uma opção, a linha vem marcada para o vendedor escolher.</p></details>
+    <details><summary>Preciso trocar meu modelo de orçamento?</summary><p>Não. O orçamento sai na planilha que a sua empresa já usa.</p></details>
+    <details><summary>Quem vê os meus dados?</summary><p>Só a sua empresa. O estoque e os orçamentos de uma distribuidora nunca aparecem para outra.</p></details>
+  </div>
+</section>
+
+<section class="final" id="contato">
+  <div class="wrap">
+    <div>
+      <h2>Mande um pedido de ontem e veja o orçamento sair.</h2>
+      <p>Com o seu estoque e o seu modelo, em uma demonstração de 20 minutos.</p>
+    </div>
+    <a class="bt" href="#">Agendar demonstração</a>
+  </div>
+</section>
+</main>
+
+<footer><div class="wrap">Orçamento Rápido · orçamento automático para distribuidoras de peças</div></footer>
+</body>
+</html>

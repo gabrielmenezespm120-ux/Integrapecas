@@ -1,0 +1,6 @@
+.venv/
+__pycache__/
+saida/
+.env
+*.novo
+*.anterior.csv

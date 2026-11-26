@@ -1,0 +1,309 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Orçamento Rápido · Layout B</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100..125,400..800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --papel: #F4F6F8; --folha: #FFFFFF; --tinta: #1C2430; --cinza: #5E6B78; --fio: #DCE2E8;
+    --petroleo: #0E4D64; --petroleo-2: #0A3A4C; --conferido: #2E7D4F; --aviso: #C2611F; --claro: #E3EEF2;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { margin: 0; background: var(--papel); color: var(--tinta); font: 17px/1.65 Archivo, system-ui, sans-serif; font-stretch: 100%; }
+  h1, h2, h3 { font-stretch: 118%; font-weight: 750; line-height: 1.05; margin: 0; letter-spacing: -0.015em; }
+  a { color: inherit; }
+  .wrap { max-width: 1120px; margin: 0 auto; padding: 0 24px; }
+  :focus-visible { outline: 3px solid var(--petroleo); outline-offset: 3px; }
+
+  header .wrap { display: flex; align-items: center; justify-content: space-between; height: 76px; }
+  .marca { display: flex; align-items: baseline; gap: 2px; font-stretch: 125%; font-weight: 800; font-size: 20px; text-decoration: none; color: var(--petroleo); }
+  .marca span { color: var(--tinta); font-weight: 500; }
+  nav { display: flex; align-items: center; gap: 28px; }
+  nav a { text-decoration: none; color: var(--cinza); font-weight: 500; font-size: 16px; }
+  nav a:hover { color: var(--tinta); }
+  .bt { display: inline-block; text-decoration: none; font-weight: 650; padding: 14px 24px; border-radius: 999px; font-size: 16px; }
+  .bt-p { background: var(--petroleo); color: #fff; }
+  .bt-p:hover { background: var(--petroleo-2); }
+  .bt-l { color: var(--petroleo); padding-left: 4px; padding-right: 4px; text-decoration: underline; text-underline-offset: 4px; }
+
+  .hero { display: grid; grid-template-columns: 1fr 1.05fr; gap: 64px; align-items: center; padding: 56px 24px 96px; }
+  .hero h1 { font-size: clamp(36px, 4.4vw, 58px); color: var(--petroleo-2); }
+  .hero p.lead { font-size: 20px; color: var(--cinza); margin: 24px 0 32px; max-width: 36ch; }
+  .hero .acoes { display: flex; align-items: center; gap: 22px; flex-wrap: wrap; }
+  .confianca { margin-top: 36px; display: flex; gap: 28px; flex-wrap: wrap; color: var(--cinza); font-size: 15px; }
+  .confianca div { display: flex; align-items: center; gap: 8px; }
+  .confianca svg { width: 18px; height: 18px; stroke: var(--conferido); fill: none; stroke-width: 2.2; }
+
+  /* a folha do orçamento é o herói */
+  .mesa { position: relative; margin-top: 56px; }
+  .folha { position: relative; background: var(--folha); border: 1px solid var(--fio); border-radius: 4px; padding: 30px 30px 24px; box-shadow: 0 1px 0 var(--fio), 0 24px 48px -28px rgba(14,77,100,.35); transform: rotate(-1.2deg); }
+  .folha .cab { display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 2px solid var(--tinta); padding-bottom: 12px; margin-bottom: 4px; }
+  .folha .cab b { font-stretch: 120%; font-size: 18px; display: block; }
+  .folha .cab small { color: var(--cinza); font-size: 13px; }
+  .folha table { width: 100%; border-collapse: collapse; font-size: 14px; font-variant-numeric: tabular-nums; }
+  .folha th { text-align: left; color: var(--cinza); font-weight: 600; font-size: 12px; padding: 8px 6px; border-bottom: 1px solid var(--fio); }
+  .folha td { padding: 8px 6px; border-bottom: 1px solid var(--fio); }
+  .folha td.r, .folha th.r { text-align: right; }
+  .folha tfoot td { border: 0; font-weight: 750; font-size: 17px; padding-top: 12px; }
+  .folha .falta td { color: var(--aviso); }
+  .carimbo { position: absolute; right: 26px; bottom: 54px; border: 3px solid var(--conferido); color: var(--conferido); border-radius: 6px; padding: 6px 12px; font-stretch: 125%; font-weight: 800; font-size: 15px; transform: rotate(-9deg); opacity: 0; animation: carimba .4s 1.1s cubic-bezier(.2,1.6,.4,1) forwards; background: rgba(255,255,255,.85); }
+  .carimbo small { display: block; font-weight: 600; font-size: 11px; font-stretch: 100%; }
+  @keyframes carimba { from { opacity: 0; transform: rotate(-9deg) scale(1.6); } to { opacity: 1; transform: rotate(-9deg) scale(1); } }
+  @media (prefers-reduced-motion: reduce) { .carimbo { animation: none; opacity: 1; } }
+  .bilhete { position: absolute; left: -36px; top: -64px; background: #DCF8C6; border-radius: 12px 12px 12px 3px; padding: 10px 14px; font-size: 14px; max-width: 250px; box-shadow: 0 10px 24px -14px rgba(0,0,0,.35); transform: rotate(2deg); }
+  .bilhete small { display: block; color: var(--cinza); font-size: 11px; text-align: right; }
+
+  .antes-depois { background: var(--folha); border-top: 1px solid var(--fio); border-bottom: 1px solid var(--fio); padding: 88px 0; }
+  .cab-sec { max-width: 640px; margin-bottom: 48px; }
+  .cab-sec h2 { font-size: clamp(32px, 3.8vw, 48px); color: var(--petroleo-2); }
+  .cab-sec p { color: var(--cinza); margin: 16px 0 0; }
+  .comparar { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; }
+  .coluna { border-radius: 10px; padding: 28px; }
+  .coluna.antes { background: var(--papel); }
+  .coluna.depois { background: var(--claro); }
+  .coluna h3 { font-size: 22px; display: flex; justify-content: space-between; align-items: baseline; }
+  .coluna h3 span { font-stretch: 100%; font-weight: 600; font-size: 15px; color: var(--cinza); }
+  .coluna.depois h3 span { color: var(--petroleo); }
+  .coluna ol { margin: 18px 0 0; padding: 0; list-style: none; counter-reset: p; }
+  .coluna li { counter-increment: p; display: grid; grid-template-columns: 30px 1fr auto; gap: 10px; padding: 11px 0; border-top: 1px solid var(--fio); }
+  .coluna li::before { content: counter(p); font-weight: 700; color: var(--cinza); }
+  .coluna li em { font-style: normal; color: var(--cinza); font-size: 14px; font-variant-numeric: tabular-nums; }
+  .coluna.depois li::before { color: var(--petroleo); }
+
+  section.sec { padding: 96px 0; }
+  .lista-rec { display: grid; grid-template-columns: repeat(3, 1fr); gap: 48px 40px; }
+  .rec h3 { font-size: 21px; margin: 14px 0 8px; }
+  .rec p { color: var(--cinza); margin: 0; font-size: 16px; }
+  .rec .ic { width: 48px; height: 48px; border-radius: 12px; background: var(--claro); display: grid; place-items: center; }
+  .rec .ic svg { width: 24px; height: 24px; stroke: var(--petroleo); fill: none; stroke-width: 1.8; }
+
+  /* sistema: celular + computador */
+  .sistema { background: var(--petroleo-2); color: #fff; padding: 96px 0; overflow: hidden; }
+  .sistema .cab-sec h2 { color: #fff; }
+  .sistema .cab-sec p { color: #A9C3CD; }
+  .duas { display: grid; grid-template-columns: 1.7fr 1fr; gap: 32px; align-items: end; }
+  .pc { background: var(--folha); color: var(--tinta); border-radius: 10px; overflow: hidden; }
+  .pc .barra { height: 34px; background: #E8EDF1; display: flex; align-items: center; padding: 0 14px; gap: 6px; font-size: 12px; color: var(--cinza); }
+  .pc .barra i { width: 9px; height: 9px; border-radius: 50%; background: #C7D0D8; }
+  .pc .app { display: grid; grid-template-columns: 190px 1fr; min-height: 360px; }
+  .menu { background: var(--papel); padding: 18px 12px; font-size: 14px; }
+  .menu a { display: block; padding: 8px 10px; border-radius: 8px; text-decoration: none; color: var(--cinza); }
+  .menu a.on { background: var(--folha); color: var(--petroleo); font-weight: 650; }
+  .painel { padding: 20px 24px; }
+  .kpis { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 18px; }
+  .kpi { border: 1px solid var(--fio); border-radius: 10px; padding: 12px 14px; }
+  .kpi small { color: var(--cinza); font-size: 12px; display: block; }
+  .kpi b { font-stretch: 115%; font-size: 26px; }
+  .painel table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  .painel th { text-align: left; color: var(--cinza); font-weight: 600; padding: 6px 4px; border-bottom: 1px solid var(--fio); }
+  .painel td { padding: 9px 4px; border-bottom: 1px solid var(--fio); }
+  .st { font-size: 12px; font-weight: 650; padding: 2px 9px; border-radius: 999px; }
+  .st.ok { background: #E1F1E7; color: var(--conferido); } .st.av { background: #FBEBDD; color: var(--aviso); }
+  .cel { background: #0B1620; border-radius: 30px; padding: 10px; max-width: 290px; justify-self: center; }
+  .cel .tela { background: var(--papel); color: var(--tinta); border-radius: 22px; overflow: hidden; min-height: 500px; display: flex; flex-direction: column; }
+  .cel .tt { background: var(--petroleo); color: #fff; padding: 16px; font-weight: 650; font-stretch: 112%; }
+  .cel .cont { padding: 14px; display: flex; flex-direction: column; gap: 10px; font-size: 14px; flex: 1; }
+  .drop { border: 2px dashed #9FB6C0; border-radius: 14px; text-align: center; padding: 22px 10px; color: var(--cinza); }
+  .drop b { display: block; color: var(--tinta); }
+  .resultado { background: var(--folha); border-radius: 14px; padding: 14px; border: 1px solid var(--fio); }
+  .resultado b { display: block; font-stretch: 112%; font-size: 17px; }
+  .resultado .av { color: var(--aviso); font-size: 13px; margin-top: 4px; }
+  .cel .bt { text-align: center; }
+
+  .planos { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0; border: 1px solid var(--fio); border-radius: 14px; background: var(--folha); overflow: hidden; }
+  .plano { padding: 32px 28px; display: flex; flex-direction: column; }
+  .plano + .plano { border-left: 1px solid var(--fio); }
+  .plano.rec2 { background: var(--claro); }
+  .plano h3 { font-size: 22px; }
+  .plano .selo { align-self: flex-start; font-size: 13px; font-weight: 650; color: var(--petroleo); margin-bottom: 8px; }
+  .plano .v { font-stretch: 112%; font-weight: 750; font-size: 40px; margin: 14px 0 0; color: var(--petroleo-2); }
+  .plano .v small { font-size: 15px; font-weight: 500; color: var(--cinza); font-stretch: 100%; }
+  .plano ul { list-style: none; padding: 0; margin: 20px 0 28px; flex: 1; }
+  .plano li { padding: 7px 0 7px 26px; position: relative; color: var(--cinza); font-size: 16px; }
+  .plano li::before { content: ""; position: absolute; left: 2px; top: 13px; width: 12px; height: 7px; border-left: 2px solid var(--conferido); border-bottom: 2px solid var(--conferido); transform: rotate(-45deg); }
+  .plano .bt { text-align: center; }
+  .bt-o { border: 1.5px solid var(--petroleo); color: var(--petroleo); }
+  .bt-o:hover { background: var(--claro); }
+
+  .faq { max-width: 760px; }
+  details { border-bottom: 1px solid var(--fio); padding: 20px 0; }
+  summary { cursor: pointer; font-weight: 650; font-size: 19px; list-style: none; display: flex; justify-content: space-between; gap: 16px; }
+  summary::after { content: ""; width: 10px; height: 10px; border-right: 2px solid var(--petroleo); border-bottom: 2px solid var(--petroleo); transform: rotate(45deg); margin-top: 6px; flex: none; transition: transform .2s; }
+  details[open] summary::after { transform: rotate(-135deg); }
+  details p { color: var(--cinza); margin: 10px 0 0; }
+
+  .cta { margin: 0 24px 64px; }
+  .cta .caixa { max-width: 1072px; margin: 0 auto; background: var(--folha); border: 1px solid var(--fio); border-radius: 18px; padding: 56px; display: grid; grid-template-columns: 1.4fr 1fr; gap: 40px; align-items: center; }
+  .cta h2 { font-size: clamp(30px, 3.6vw, 44px); color: var(--petroleo-2); }
+  .cta p { color: var(--cinza); margin: 14px 0 0; }
+  .cta .lado { display: flex; flex-direction: column; gap: 12px; }
+  .cta .bt { text-align: center; }
+  footer { border-top: 1px solid var(--fio); padding: 28px 0; color: var(--cinza); font-size: 14px; }
+  footer .wrap { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+
+  @media (max-width: 920px) {
+    nav a:not(.bt) { display: none; }
+    .hero, .comparar, .duas, .cta .caixa { grid-template-columns: 1fr; }
+    .hero { padding-top: 24px; gap: 72px; }
+    .bilhete { left: 0; top: -60px; }
+    .lista-rec, .planos { grid-template-columns: 1fr; }
+    .plano + .plano { border-left: 0; border-top: 1px solid var(--fio); }
+    .pc .app { grid-template-columns: 1fr; }
+    .menu { display: none; }
+    .kpis { grid-template-columns: 1fr 1fr 1fr; }
+    .cta .caixa { padding: 32px 24px; }
+    section.sec, .antes-depois, .sistema { padding: 64px 0; }
+  }
+  .marca, .bt { white-space: nowrap; }
+  @media (max-width: 520px) { nav .bt { padding: 8px 12px !important; font-size: 14px; } .wrap { padding: 0 16px; } .hero { padding-left: 16px; padding-right: 16px; } .folha { padding: 20px 14px; transform: none; } .hide-sm { display: none; } .kpi b { font-size: 20px; } .cta { margin: 0 16px 48px; } }
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <a class="marca" href="#">orçamento<span>rápido</span></a>
+    <nav><a href="#como">Como funciona</a><a href="#sistema">Sistema</a><a href="#planos">Planos</a><a class="bt bt-p" href="#contato" style="padding:10px 18px">Pedir demonstração</a></nav>
+  </div>
+</header>
+
+<main>
+  <div class="wrap hero">
+    <div>
+      <h1>Cada pedido vira um orçamento conferido, no seu modelo.</h1>
+      <p class="lead">Seu vendedor encaminha o pedido do cliente e recebe a planilha pronta, com código, preço e estoque da sua empresa. O que não tem certeza, ele avisa.</p>
+      <div class="acoes"><a class="bt bt-p" href="#contato">Testar com um pedido real</a><a class="bt bt-l" href="#como">Como funciona</a></div>
+      <div class="confianca">
+        <div><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12l5 5 9-10"/></svg>Sem trocar de sistema</div>
+        <div><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12l5 5 9-10"/></svg>Funciona no celular</div>
+        <div><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12l5 5 9-10"/></svg>Começa na mesma semana</div>
+      </div>
+    </div>
+    <div class="mesa">
+      <div class="folha" aria-label="Exemplo de orçamento gerado">
+        <div class="cab"><div><b>Orçamento 1.284</b><small>Transportes Silva · Atego 2426, revisão</small></div><small>25/11/2026</small></div>
+        <table>
+          <thead><tr><th>Código</th><th>Descrição</th><th class="r hide-sm">Qtd</th><th class="r">Valor</th></tr></thead>
+          <tbody>
+            <tr><td>TRK-0101</td><td>Filtro de óleo motor</td><td class="r hide-sm">1</td><td class="r">89,90</td></tr>
+            <tr><td>TRK-0102</td><td>Filtro de combustível</td><td class="r hide-sm">1</td><td class="r">74,50</td></tr>
+            <tr><td>TRK-0103</td><td>Separador de água</td><td class="r hide-sm">1</td><td class="r">112,00</td></tr>
+            <tr><td>TRK-0104</td><td>Filtro de ar primário</td><td class="r hide-sm">1</td><td class="r">268,00</td></tr>
+            <tr><td>TRK-0106</td><td>Filtro secador APU</td><td class="r hide-sm">1</td><td class="r">395,00</td></tr>
+            <tr><td>TRK-0107</td><td>Óleo 15W40 (litro)</td><td class="r hide-sm">22</td><td class="r">723,80</td></tr>
+            <tr class="falta"><td>—</td><td>Fluido DOT 4: conferir</td><td class="r hide-sm">2</td><td class="r">—</td></tr>
+          </tbody>
+          <tfoot><tr><td colspan="2">Total</td><td class="hide-sm"></td><td class="r">R$ 2.039,20</td></tr></tfoot>
+        </table>
+        <div class="carimbo">CONFERIDO<small>no estoque · 9 de 10</small></div>
+      </div>
+      <div class="bilhete">Orçamento p/ revisão do Atego 2426, 22 L de óleo e 2 DOT 4<small>09:41</small></div>
+    </div>
+  </div>
+
+  <section class="antes-depois" id="como">
+    <div class="wrap">
+      <div class="cab-sec"><h2>O mesmo pedido, de dois jeitos</h2><p>Tempos de exemplo para um pedido de 10 itens. No piloto, medimos os da sua equipe.</p></div>
+      <div class="comparar">
+        <div class="coluna antes"><h3>Hoje <span>cerca de 15 min</span></h3><ol>
+          <li>Ler a mensagem e decifrar o que o cliente quis dizer<em>2 min</em></li>
+          <li>Procurar cada código no sistema<em>6 min</em></li>
+          <li>Ver estoque e preço, item por item<em>4 min</em></li>
+          <li>Digitar tudo na planilha<em>3 min</em></li></ol></div>
+        <div class="coluna depois"><h3>Com o Orçamento Rápido <span>menos de 2 min</span></h3><ol>
+          <li>Compartilhar o pedido do WhatsApp<em>10 s</em></li>
+          <li>O sistema lê, acha os códigos e confere o estoque<em>30 s</em></li>
+          <li>Conferir os itens marcados<em>1 min</em></li>
+          <li>Enviar a planilha ao cliente<em>10 s</em></li></ol></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec">
+    <div class="wrap">
+      <div class="cab-sec"><h2>Feito para o balcão de peças</h2></div>
+      <div class="lista-rec">
+        <div class="rec"><div class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 8h8M8 12h8M8 16h5"/></svg></div><h3>Lê qualquer pedido</h3><p>Texto, print, foto de papel, PDF, planilha ou áudio do cliente.</p></div>
+        <div class="rec"><div class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12l4 4 10-10"/></svg></div><h3>Não inventa peça</h3><p>Cada item vem como confirmado, provável ou não encontrado, com o motivo.</p></div>
+        <div class="rec"><div class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 10l9-6 9 6v10H3z"/><path d="M9 20v-6h6v6"/></svg></div><h3>Seu estoque, seu preço</h3><p>Usa o relatório que o seu sistema já exporta. O gerente atualiza em um clique.</p></div>
+        <div class="rec"><div class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18M9 9v11"/></svg></div><h3>Sua planilha</h3><p>O orçamento sai no modelo que sua equipe já manda para o cliente.</p></div>
+        <div class="rec"><div class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8" r="3.5"/><path d="M3 20c0-3.5 2.7-6 6-6s6 2.5 6 6M16 4.5a3.5 3.5 0 0 1 0 7M21 20c0-3-1.8-5.3-4.5-5.9"/></svg></div><h3>Um login por vendedor</h3><p>O gerente cadastra a equipe e acompanha quem orçou o quê.</p></div>
+        <div class="rec"><div class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="10" width="14" height="10" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg></div><h3>Dados protegidos</h3><p>Conexão segura e informações de cada empresa separadas.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sistema" id="sistema">
+    <div class="wrap">
+      <div class="cab-sec"><h2>O vendedor usa no celular. O gerente acompanha no computador.</h2><p>As duas telas mostram o mesmo orçamento, com o que precisa de atenção em destaque.</p></div>
+      <div class="duas">
+        <div class="pc">
+          <div class="barra"><i></i><i></i><i></i><span style="margin-left:10px">app.orcamentorapido.com.br/painel</span></div>
+          <div class="app">
+            <div class="menu"><a class="on" href="#">Orçamentos</a><a href="#">Estoque e preços</a><a href="#">Vendedores</a><a href="#">Plano e uso</a></div>
+            <div class="painel">
+              <div class="kpis"><div class="kpi"><small>Hoje</small><b>23</b></div><div class="kpi"><small>No mês</small><b>412</b></div><div class="kpi"><small>Para conferir</small><b>3</b></div></div>
+              <table>
+                <thead><tr><th>Cliente</th><th class="hide-sm">Vendedor</th><th>Valor</th><th>Situação</th></tr></thead>
+                <tbody>
+                  <tr><td>Transportes Silva</td><td class="hide-sm">João</td><td>R$ 2.039</td><td><span class="st av">1 item a conferir</span></td></tr>
+                  <tr><td>Rodolog</td><td class="hide-sm">Marta</td><td>R$ 4.870</td><td><span class="st ok">Enviado</span></td></tr>
+                  <tr><td>JM Cargas</td><td class="hide-sm">João</td><td>R$ 1.312</td><td><span class="st ok">Enviado</span></td></tr>
+                  <tr><td>Fazenda Boa Vista</td><td class="hide-sm">Carlos</td><td>R$ 986</td><td><span class="st ok">Enviado</span></td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        <div class="cel">
+          <div class="tela">
+            <div class="tt">Novo orçamento</div>
+            <div class="cont">
+              <div class="drop"><b>Pedido recebido</b>compartilhado do WhatsApp</div>
+              <div class="resultado"><b>10 itens · R$ 2.039,20</b>Atego 2426, revisão<div class="av">Conferir: fluido DOT 4 não cadastrado</div></div>
+              <div style="flex:1"></div>
+              <a class="bt bt-p" href="#">Baixar planilha</a>
+              <a class="bt bt-o" href="#">Enviar no WhatsApp</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec" id="planos">
+    <div class="wrap">
+      <div class="cab-sec"><h2>Planos</h2><p>Valores de exemplo para o layout. A implantação configura sua planilha e o primeiro estoque.</p></div>
+      <div class="planos">
+        <div class="plano"><h3>Essencial</h3><div class="v">R$ 490<small> por mês</small></div><ul><li>Até 3 vendedores</li><li>300 orçamentos por mês</li><li>Busca no seu cadastro</li></ul><a class="bt bt-o" href="#contato">Falar com a gente</a></div>
+        <div class="plano rec2"><span class="selo">Mais escolhido</span><h3>Profissional</h3><div class="v">R$ 890<small> por mês</small></div><ul><li>Até 10 vendedores</li><li>1.000 orçamentos por mês</li><li>Cadastro e catálogos da empresa</li><li>Painel do gerente</li></ul><a class="bt bt-p" href="#contato">Pedir demonstração</a></div>
+        <div class="plano"><h3>Avançado</h3><div class="v" style="font-size:32px">Sob consulta</div><ul><li>Vendedores ilimitados</li><li>Pesquisa de peça na internet</li><li>Várias filiais</li></ul><a class="bt bt-o" href="#contato">Falar com a gente</a></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec" style="padding-top:0">
+    <div class="wrap">
+      <div class="cab-sec"><h2>Dúvidas comuns</h2></div>
+      <div class="faq">
+        <details open><summary>Preciso trocar meu sistema?</summary><p>Não. Usamos o relatório de estoque e preço que o seu sistema já exporta.</p></details>
+        <details><summary>E se o sistema errar a peça?</summary><p>Ele não chuta. O que não tem certeza vem marcado, e o vendedor revisa antes de enviar.</p></details>
+        <details><summary>Meus preços ficam seguros?</summary><p>Sim. Cada vendedor tem login próprio, a conexão é segura e os dados da sua empresa não aparecem para ninguém de fora.</p></details>
+        <details><summary>Quanto tempo para começar?</summary><p>Com o modelo da planilha e o relatório de estoque em mãos, a equipe usa na mesma semana.</p></details>
+      </div>
+    </div>
+  </section>
+
+  <section class="cta" id="contato">
+    <div class="caixa">
+      <div><h2>Mande um pedido que chegou ontem</h2><p>Devolvemos o orçamento pronto no seu modelo, para você comparar com o que sua equipe fez.</p></div>
+      <div class="lado"><a class="bt bt-p" href="#">Chamar no WhatsApp</a><a class="bt bt-o" href="#">Enviar por e-mail</a></div>
+    </div>
+  </section>
+</main>
+<footer><div class="wrap"><span>Orçamento Rápido</span><span>contato@orcamentorapido.com.br</span></div></footer>
+</body>
+</html>
