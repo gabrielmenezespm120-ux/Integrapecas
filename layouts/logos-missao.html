@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>QuoteDesk: logos sobre agilidade</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root { --chapa: #EEF1F3; --tinta: #15202B; --aco: #5B6B7A; --linha: #C9D1D8; --sinal: #F5B700; --branco: #FFFFFF; }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--chapa); color: var(--tinta); font: 16px/1.55 Barlow, system-ui, sans-serif; }
+  .wrap { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
+  header { padding: 48px 0 28px; }
+  h1 { font: 700 clamp(34px, 4.4vw, 52px)/1.05 "Barlow Condensed", sans-serif; margin: 0; }
+  header p { color: var(--aco); max-width: 62ch; margin: 12px 0 0; }
+
+  .opcao { background: var(--branco); border: 1px solid var(--linha); border-radius: 8px; margin-bottom: 24px; overflow: hidden; }
+  .cab { display: flex; gap: 14px; align-items: baseline; padding: 18px 22px; border-bottom: 1px solid var(--linha); }
+  .cab b { font: 700 30px/1 "Barlow Condensed", sans-serif; color: var(--sinal); -webkit-text-stroke: 1.2px var(--tinta); }
+  .cab h2 { font: 700 26px/1.1 "Barlow Condensed", sans-serif; margin: 0; }
+  .cab p { margin: 0; color: var(--aco); font-size: 15px; }
+  .cab div { display: flex; flex-direction: column; gap: 4px; }
+  .vitrine { display: grid; grid-template-columns: 1fr 1fr 220px; }
+  .fundo { display: flex; flex-direction: column; gap: 22px; align-items: center; justify-content: center; padding: 32px 20px; min-height: 170px; }
+  /* cor principal = cor do texto do fundo; --acc = amarelo; --paper = cor do fundo (miolos vazados) */
+  .claro, .pequenos { --acc: var(--sinal); --paper: #fff; }
+  .claro { background: var(--branco); color: var(--tinta); }
+  .escuro { background: var(--tinta); color: #fff; --acc: var(--sinal); --paper: var(--tinta); }
+  .grande { width: 128px; height: 128px; }
+  .pequenos { border-left: 1px solid var(--linha); background: var(--chapa); padding: 20px; display: flex; flex-direction: column; justify-content: center; gap: 16px; color: var(--tinta); }
+  .pequenos .linha { display: flex; align-items: center; gap: 14px; font-size: 13px; color: var(--aco); }
+  .app { width: 56px; height: 56px; border-radius: 14px; background: var(--branco); border: 1px solid var(--linha); display: grid; place-items: center; flex: none; }
+  .app svg { width: 40px; height: 40px; }
+  .aba { display: flex; align-items: center; gap: 8px; background: var(--branco); border: 1px solid var(--linha); border-radius: 8px 8px 0 0; padding: 6px 10px; font-size: 12px; color: var(--tinta); width: fit-content; }
+  .aba svg { width: 16px; height: 16px; }
+
+  .lockup { display: flex; align-items: center; gap: 14px; }
+  .lockup svg { width: 60px; height: 60px; flex: none; }
+  .empilhado { display: flex; flex-direction: column; gap: 5px; }
+  .nome { font: 700 44px/1 "Barlow Condensed", sans-serif; letter-spacing: -0.01em; white-space: nowrap; }
+  .empilhado small { font: 500 14px/1 Barlow, sans-serif; letter-spacing: .02em; opacity: .75; white-space: nowrap; }
+
+  .cheio { fill: currentColor; }
+  .amarelo { fill: var(--acc); }
+  .vazado { fill: var(--paper); }
+  .traco { fill: none; stroke-linecap: round; stroke-linejoin: round; }
+  footer { color: var(--aco); font-size: 14px; padding: 8px 0 48px; }
+
+  @media (max-width: 900px) {
+    .vitrine { grid-template-columns: 1fr; }
+    .pequenos { border-left: 0; border-top: 1px solid var(--linha); flex-direction: row; flex-wrap: wrap; }
+  }
+  @media (max-width: 520px) {
+    .wrap { padding: 0 16px; }
+    .fundo { padding: 26px 12px; }
+    .grande { width: 104px; height: 104px; }
+    .lockup svg { width: 46px; height: 46px; }
+    .nome { font-size: 36px; } .empilhado small { font-size: 12.5px; }
+    .cab { padding: 14px 16px; }
+  }
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <!-- M1: porca em movimento -->
+  <symbol id="m1" viewBox="0 0 64 64">
+    <path class="traco" d="M3 22 H15 M7 32 H15 M3 42 H15" stroke="var(--acc)" stroke-width="4.5"/>
+    <polygon class="cheio" points="40,10 59,21 59,43 40,54 21,43 21,21" stroke="currentColor" stroke-width="3" stroke-linejoin="round"/>
+    <circle class="amarelo" cx="40" cy="32" r="8.5"/>
+  </symbol>
+  <!-- M2: cronômetro com corpo de porca -->
+  <symbol id="m2" viewBox="0 0 64 64">
+    <rect class="cheio" x="27" y="3" width="10" height="6" rx="2"/>
+    <rect class="cheio" x="30" y="8" width="4" height="7"/>
+    <path class="traco" d="M47 16 L51 12" stroke="currentColor" stroke-width="4.5"/>
+    <polygon class="cheio" points="32,14 51,25 51,47 32,58 13,47 13,25" stroke="currentColor" stroke-width="3" stroke-linejoin="round"/>
+    <circle class="vazado" cx="32" cy="36" r="13"/>
+    <path class="amarelo" d="M32 36 V23 A13 13 0 0 1 43.3 29.5 Z"/>
+    <path class="traco" d="M32 36 L41 30.8" stroke="currentColor" stroke-width="3.5"/>
+    <circle class="cheio" cx="32" cy="36" r="2.6"/>
+  </symbol>
+  <!-- M3: etiqueta de preço em movimento -->
+  <symbol id="m3" viewBox="0 0 64 64">
+    <path class="traco" d="M2 23 H10 M4 32 H10 M2 41 H10" stroke="var(--acc)" stroke-width="4"/>
+    <path class="cheio" d="M18 13 H44 L60 32 L44 51 H18 a4 4 0 0 1 -4 -4 V17 a4 4 0 0 1 4 -4 Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+    <circle class="vazado" cx="47" cy="32" r="3.8"/>
+    <rect class="amarelo" x="20" y="24.5" width="17" height="5" rx="2.5"/>
+    <rect class="amarelo" x="20" y="34.5" width="11" height="5" rx="2.5"/>
+  </symbol>
+  <!-- M4: folha de orçamento com raio -->
+  <symbol id="m4" viewBox="0 0 64 64">
+    <path class="cheio" d="M14 5 H40 L52 17 V59 H14 Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+    <path class="vazado" d="M40 5 V17 H52 Z"/>
+    <path class="amarelo" d="M35 15 L21 37 H31 L27 54 L43 30 H33 L37 15 Z"/>
+  </symbol>
+  <!-- M5: pedido vira orçamento num passo -->
+  <symbol id="m5" viewBox="0 0 64 64">
+    <rect class="cheio" x="2" y="14" width="24" height="19" rx="5"/>
+    <path class="cheio" d="M7 31 L5 40 L15 31 Z"/>
+    <path class="traco" d="M8 21 H20 M8 26 H16" stroke="var(--paper)" stroke-width="2.6"/>
+    <path class="traco" d="M29 18 L35 24 L29 30" stroke="var(--acc)" stroke-width="4.5"/>
+    <rect class="cheio" x="38" y="10" width="24" height="44" rx="3"/>
+    <rect class="amarelo" x="42" y="15" width="16" height="5" rx="1"/>
+    <path class="traco" d="M42 27 H58 M42 34 H58 M42 41 H58 M42 48 H52" stroke="var(--paper)" stroke-width="2.6"/>
+  </symbol>
+</svg>
+
+<header class="wrap">
+  <h1>Logos sobre a missão: orçamento de peças rápido e fácil</h1>
+  <p>Cinco símbolos que falam do que o QuoteDesk faz, e não da letra do nome. Todos vêm com a frase em português embaixo do nome. Cada um aparece grande, junto do nome nos dois fundos e nos tamanhos pequenos.</p>
+</header>
+
+<main class="wrap">
+  <section class="opcao">
+    <div class="cab"><b>1</b><div><h2>Porca em movimento</h2><p>Uma porca com linhas de velocidade: a peça andando rápido. O mais simples de reconhecer.</p></div></div>
+    <div class="vitrine">
+      <div class="fundo claro"><svg class="grande"><use href="#m1"/></svg><div class="lockup"><svg><use href="#m1"/></svg><span class="empilhado"><span class="nome">QuoteDesk</span><small>orçamento automático de peças</small></span></div></div>
+      <div class="fundo escuro"><div class="lockup"><svg><use href="#m1"/></svg><span class="empilhado"><span class="nome">QuoteDesk</span><small>orçamento automático de peças</small></span></div></div>
+      <div class="pequenos"><div class="linha"><span class="app"><svg><use href="#m1"/></svg></span>ícone de app</div><div class="linha"><span class="aba"><svg><use href="#m1"/></svg>QuoteDesk</span></div></div>
+    </div>
+  </section>
+
+  <section class="opcao">
+    <div class="cab"><b>2</b><div><h2>Cronômetro de porca</h2><p>Um cronômetro com corpo de porca e o ponteiro marcando pouco tempo: o orçamento em minutos.</p></div></div>
+    <div class="vitrine">
+      <div class="fundo claro"><svg class="grande"><use href="#m2"/></svg><div class="lockup"><svg><use href="#m2"/></svg><span class="empilhado"><span class="nome">QuoteDesk</span><small>orçamento automático de peças</small></span></div></div>
+      <div class="fundo escuro"><div class="lockup"><svg><use href="#m2"/></svg><span class="empilhado"><span class="nome">QuoteDesk</span><small>orçamento automático de peças</small></span></div></div>
+      <div class="pequenos"><div class="linha"><span class="app"><svg><use href="#m2"/></svg></span>ícone de app</div><div class="linha"><span class="aba"><svg><use href="#m2"/></svg>QuoteDesk</span></div></div>
+    </div>
+  </section>
+
+  <section class="opcao">
+    <div class="cab"><b>3</b><div><h2>Etiqueta de preço veloz</h2><p>A etiqueta de preço, que é a cotação, saindo rápido. Une preço e agilidade.</p></div></div>
+    <div class="vitrine">
+      <div class="fundo claro"><svg class="grande"><use href="#m3"/></svg><div class="lockup"><svg><use href="#m3"/></svg><span class="empilhado"><span class="nome">QuoteDesk</span><small>orçamento automático de peças</small></span></div></div>
+      <div class="fundo escuro"><div class="lockup"><svg><use href="#m3"/></svg><span class="empilhado"><span class="nome">QuoteDesk</span><small>orçamento automático de peças</small></span></div></div>
+      <div class="pequenos"><div class="linha"><span class="app"><svg><use href="#m3"/></svg></span>ícone de app</div><div class="linha"><span class="aba"><svg><use href="#m3"/></svg>QuoteDesk</span></div></div>
+    </div>
+  </section>
+
+  <section class="opcao">
+    <div class="cab"><b>4</b><div><h2>Orçamento relâmpago</h2><p>A folha do orçamento com um raio: pronto na hora.</p></div></div>
+    <div class="vitrine">
+      <div class="fundo claro"><svg class="grande"><use href="#m4"/></svg><div class="lockup"><svg><use href="#m4"/></svg><span class="empilhado"><span class="nome">QuoteDesk</span><small>orçamento automático de peças</small></span></div></div>
+      <div class="fundo escuro"><div class="lockup"><svg><use href="#m4"/></svg><span class="empilhado"><span class="nome">QuoteDesk</span><small>orçamento automático de peças</small></span></div></div>
+      <div class="pequenos"><div class="linha"><span class="app"><svg><use href="#m4"/></svg></span>ícone de app</div><div class="linha"><span class="aba"><svg><use href="#m4"/></svg>QuoteDesk</span></div></div>
+    </div>
+  </section>
+
+  <section class="opcao">
+    <div class="cab"><b>5</b><div><h2>Do pedido ao orçamento</h2><p>A mensagem do cliente e a planilha pronta, ligadas por uma seta: um passo só.</p></div></div>
+    <div class="vitrine">
+      <div class="fundo claro"><svg class="grande"><use href="#m5"/></svg><div class="lockup"><svg><use href="#m5"/></svg><span class="empilhado"><span class="nome">QuoteDesk</span><small>orçamento automático de peças</small></span></div></div>
+      <div class="fundo escuro"><div class="lockup"><svg><use href="#m5"/></svg><span class="empilhado"><span class="nome">QuoteDesk</span><small>orçamento automático de peças</small></span></div></div>
+      <div class="pequenos"><div class="linha"><span class="app"><svg><use href="#m5"/></svg></span>ícone de app</div><div class="linha"><span class="aba"><svg><use href="#m5"/></svg>QuoteDesk</span></div></div>
+    </div>
+  </section>
+</main>
+
+<footer class="wrap">Rascunhos. O escolhido ganha a versão final em arquivo (SVG e PNG).</footer>
+</body>
+</html>
