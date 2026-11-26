@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="256" height="256" role="img" aria-label="QuoteDesk">
+<path d="M2 24 H14 M5 33 H13 M2 42 H11" fill="none" stroke="#F5B700" stroke-width="4" stroke-linecap="round"/>
+<g transform="translate(10 0) skewX(-12)">
+  <path d="M19 6 H43 L55 18 V58 H19 Z" fill="#15202B" stroke="#15202B" stroke-width="2" stroke-linejoin="round"/>
+  <path d="M43 6 V18 H55 Z" fill="#FFFFFF"/>
+  <path d="M39 15 L26 36 H35 L31 53 L46 30 H37 L41 15 Z" fill="#F5B700"/>
+</g>
+</svg>

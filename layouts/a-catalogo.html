@@ -4,6 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>QuoteDesk: orçamento automático para distribuidoras de peças</title>
+<link rel="icon" type="image/svg+xml" href="marca/logo.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Barlow:wght@400;500;600&family=Caveat:wght@500;600&display=swap" rel="stylesheet">
 <style>
@@ -22,7 +23,18 @@
   header { border-bottom: 1px solid var(--linha); background: var(--chapa); position: sticky; top: 0; z-index: 5; }
   header .wrap { display: flex; align-items: center; justify-content: space-between; height: 64px; }
   .marca { display: flex; align-items: center; gap: 10px; font: 700 22px "Barlow Condensed", sans-serif; text-decoration: none; }
-  .marca svg { width: 30px; height: 30px; }
+  .marca svg { width: 36px; height: 36px; }
+  /* logo animado (folha relâmpago): o rastro corre, a folha balança, o raio pisca */
+  .logo .r { fill: none; stroke: var(--sinal); stroke-width: 4; stroke-linecap: round; animation: vento .9s linear infinite; }
+  .logo .r2 { animation-delay: -.3s; } .logo .r3 { animation-delay: -.6s; }
+  .logo .folha { fill: var(--tinta); stroke: var(--tinta); stroke-width: 2; stroke-linejoin: round; }
+  .logo .dobra { fill: var(--chapa); }
+  .logo .raio { fill: var(--sinal); animation: faisca 2.4s infinite; }
+  .logo .corpo { animation: corre .45s ease-in-out infinite alternate; }
+  @keyframes vento { 0% { transform: translateX(6px); opacity: 0; } 25% { opacity: 1; } 100% { transform: translateX(-7px); opacity: 0; } }
+  @keyframes corre { from { transform: translateY(.8px); } to { transform: translateY(-1.2px); } }
+  @keyframes faisca { 0%, 88%, 100% { opacity: 1; } 92% { opacity: .35; } }
+  @media (prefers-reduced-motion: reduce) { .logo * { animation: none !important; } }
   nav a { text-decoration: none; margin-left: 26px; color: var(--aco); font-weight: 500; }
   nav a:hover { color: var(--tinta); }
   .bt { display: inline-block; text-decoration: none; font-weight: 600; padding: 13px 22px; border-radius: 4px; border: 2px solid var(--tinta); }
@@ -200,7 +212,14 @@
 <header>
   <div class="wrap">
     <a class="marca" href="#">
-      <svg viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="16" r="13" fill="none" stroke="#15202B" stroke-width="3"/><circle cx="16" cy="16" r="5" fill="#F5B700" stroke="#15202B" stroke-width="2"/><path d="M16 3v5M16 24v5M3 16h5M24 16h5" stroke="#15202B" stroke-width="3"/></svg>
+      <svg class="logo" viewBox="0 0 64 64" aria-hidden="true">
+        <path class="r r1" d="M2 24 H14"/><path class="r r2" d="M5 33 H13"/><path class="r r3" d="M2 42 H11"/>
+        <g class="corpo"><g transform="translate(10 0) skewX(-12)">
+          <path class="folha" d="M19 6 H43 L55 18 V58 H19 Z"/>
+          <path class="dobra" d="M43 6 V18 H55 Z"/>
+          <path class="raio" d="M39 15 L26 36 H35 L31 53 L46 30 H37 L41 15 Z"/>
+        </g></g>
+      </svg>
       QuoteDesk
     </a>
     <nav><a href="#segmentos">Para quem é</a><a href="#como">Como funciona</a><a href="#sistema">O sistema</a><a href="#planos">Planos</a><a class="bt bt-cheio" href="#contato" style="padding:9px 16px">Pedir demonstração</a></nav>
